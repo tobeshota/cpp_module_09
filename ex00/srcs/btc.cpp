@@ -1,6 +1,12 @@
 #include "btc.hpp"
 
-std::map<std::string, float> btc::storeBtcPricePerDate(std::string filePath) {
+static std::ifstream openInfileSafely(const char *infilePath) {
+	std::ifstream infile(infilePath);
+	if(!infile)	throw std::invalid_argument("infile couldn't open");
+	return infile;
+}
+
+std::map<std::string, float> btc::storeBtcPricePerDate(const char *filePath) {
 	;
 }
 
@@ -24,12 +30,6 @@ btc& btc::operator=(const btc& copy) {
 btc::~btc()
 {
 	std::cout << "(constructor)btc destructor called" << std::endl;
-}
-
-std::ifstream openInfileSafely(const char *infilePath) {
-	std::ifstream infile(infilePath);
-	if(!infile)	throw std::invalid_argument("infile couldn't open");
-	return infile;
 }
 
 const std::string &btc::getValidDate(std::string line) {

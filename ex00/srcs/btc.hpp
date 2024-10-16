@@ -16,7 +16,7 @@ class btc {
 	private:
 		//	date毎のbitcoinの価格。"data.csv"に記載の値
 		std::map<std::string, float> _m_btc_price;
-		static std::map<std::string, float> storeBtcPricePerDate(std::string filePath);
+		static std::map<std::string, float> storeBtcPricePerDate(const char *filePath);
 		static const std::string &getValidDate(std::string line);
 		static float getValidHoldings(std::string line);
 		static void printBtcValue(const std::string &date, float holdings);

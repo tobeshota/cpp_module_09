@@ -1,0 +1,19 @@
+# debug
+*.DS_Store
+*.vscode/
+*.dSTM/
+
+# output
+*.out
+
+# object
+*.o
+*.a
+
+# test
+tmp/
+build/
+
+# docs
+html/
+latex/

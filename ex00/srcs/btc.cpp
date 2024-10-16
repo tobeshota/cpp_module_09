@@ -29,7 +29,6 @@ btc::~btc()
 
 std::ifstream openInfileSafely(const char *infilePath) {
 	std::ifstream infile(infilePath);
-	// 例外の自動スローを有効化
 	if(!infile)	throw std::invalid_argument("infile couldn't open");
 	return infile;
 }

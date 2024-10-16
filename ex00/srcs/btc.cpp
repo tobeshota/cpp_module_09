@@ -1,18 +1,24 @@
 #include "btc.hpp"
 
+std::map<std::string, float> btc::storeBtcPricePerDate(std::string filePath) {
+	;
+}
+
 btc::btc() {
+	// bitcoinの時価一覧表ファイルを読み込む
+	_m_btc_price = storeBtcPricePerDate(BTC_MARKET_VALUE_CHART);
 	std::cout << "(constructor)btc Default constructor called" << std::endl;
 }
 
 btc::btc(const btc& copy) {
-	std::cout << "(constructor)btc Copy constructor called" << std::endl;
 	*this = copy;
+	std::cout << "(constructor)btc Copy constructor called" << std::endl;
 }
 
 // 何もすることがない
 btc& btc::operator=(const btc& copy) {
 	if (this != &copy)
-		return *this;
+		this->_m_btc_price = copy._m_btc_price;
 	return *this;
 }
 
@@ -28,10 +34,6 @@ std::ifstream openInfileSafely(const char *infilePath) {
 	return infile;
 }
 
-std::map<std::string, float> btc::storeBtcPricePerDate(std::string filePath) {
-	;
-}
-
 const std::string &btc::getValidDate(std::string line) {
 	;
 }
@@ -45,9 +47,6 @@ void printBtcValue(const std::string &date, float holdings) {
 }
 
 void btc::exchangeSafely(const char *tableOfBtcHolingsPerDate) {
-	// bitcoinの時価一覧表ファイルを読み込む
-	_m_btc_price = storeBtcPricePerDate(BTC_MARKET_VALUE_CHART);
-
 	// 各行ごとに見ていく
 	std::ifstream infile = openInfileSafely(tableOfBtcHolingsPerDate);
 	std::string line;

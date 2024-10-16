@@ -15,7 +15,6 @@ btc::btc(const btc& copy) {
 	std::cout << "(constructor)btc Copy constructor called" << std::endl;
 }
 
-// 何もすることがない
 btc& btc::operator=(const btc& copy) {
 	if (this != &copy)
 		this->_m_btc_price = copy._m_btc_price;

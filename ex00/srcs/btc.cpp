@@ -6,17 +6,22 @@ static std::ifstream openInfileSafely(const char *infilePath) {
 	return infile;
 }
 
-// 文字列をfloat型に変換
-static float str2float(const std::string &s) {
-    std::stringstream ss(s);
-    float fnb;
+// 文字列を特定の型に変換
+template<typename T>
+static T str2TSafely(const std::string &s, T type) {
+    (void)type;  // 型推論のために使わない引数
+	std::stringstream ss(s);
+    T fnb;
     ss >> fnb;
+	// 変換が失敗した場合、または残った文字列がある場合は例外を投げる
+    if (ss.fail() || !ss.eof())
+		throw std::invalid_argument(CONVERT_ERRMSG(s));
 	return fnb;
 }
 
-static void splitKeyAndValueByDelimiter(const std::string& src, const std::string &delimiter, std::string &key, std::string &value) {
+static void splitKeyAndValueByDelimiter(const std::string& src, const std::string &delim, std::string &key, std::string &value) {
 	// カンマの位置を見つける
-    std::size_t commaPos = src.find(delimiter);
+    std::size_t commaPos = src.find(delim);
 
     if (commaPos != std::string::npos) {
         // カンマの前の部分をs1に、後の部分をs2に代入
@@ -28,6 +33,20 @@ static void splitKeyAndValueByDelimiter(const std::string& src, const std::strin
     }
 }
 
+// 文字列を '-' で3つに分割する関数
+// static void splitDate(const std::string& date, int year, int month, int day) {
+//     size_t delim1st = date.find('-');
+//     if (delim1st != std::string::npos) {
+//         year = date.substr(0, delim1st);
+//         size_t delim2nd = date.find('-', delim1st + 1);
+//         if (delim2nd != std::string::npos) {
+//             month = date.substr(delim1st + 1, delim2nd - delim1st - 1);
+//             day = date.substr(delim2nd + 1);
+//         }
+//     }
+// }
+
+
 std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePath) {
 	std::map<std::string, float> map;
 	std::ifstream infile = openInfileSafely(filePath);
@@ -35,7 +54,10 @@ std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePa
 	while (getline(infile, line)) {
 		std::string key, value;
 		splitKeyAndValueByDelimiter(line, CSV_DELIMITER, key, value);
-		map.insert(std::make_pair(key, str2float(value)));
+
+		// float型として型変換することに成功したkeyとvalueの組み合わせのみmapにinsertする
+		try { map.insert(std::make_pair(key, str2TSafely(value, static_cast<float>(4.2f)))); }
+		catch(const std::exception& e) { ; }
 	}
 	return map;
 }
@@ -64,8 +86,16 @@ btc::~btc()
 	std::cout << "(constructor)btc destructor called" << std::endl;
 }
 
+// bool isDateValid(std::string date) {
+
+// }
+
 // const std::string &btc::getValidDate(std::string line) {
-// 	;
+// 	std::string date, holdings;
+// 	splitKeyAndValueByDelimiter(line, INPUT_TXT_DELIMITER, date, holdings);
+// 	// dateが不正のときにエラーが出せる
+// 	// if (isDateValid(date) == false)
+// 		throw std::invalid_argument(DATE_ERRMSG(date));
 // }
 
 // float getValidHoldings(std::string line) {

@@ -6,6 +6,21 @@
 
 #define BTC_MARKET_VALUE_CHART "./srcs/data.csv"
 #define CSV_DELIMITER ","
+#define INPUT_TXT_DELIMITER " | "
+#define DATE_ERRMSG(DATE) (RED + std::string("Error: bad input => ") + (DATE) + "\n" + DEFAULT)
+#define CONVERT_ERRMSG(TARGET) (RED + std::string("Error: '") + (TARGET) + "' failed to be converted\n" + DEFAULT)
+
+// color
+# define BLACK "\x1b[30m"
+# define RED "\x1b[31m"
+# define GREEN "\x1b[32m"
+# define YELLOW "\x1b[33m"
+# define BLUE "\x1b[34m"
+# define MAGENTA "\x1b[35m"
+# define CYAN "\x1b[36m"
+# define WHITE "\x1b[37m"
+# define BOLD "\x1b[1m"
+# define DEFAULT "\x1b[0m\x1b[39m"
 
 /**std::map
   - 特徴: 木構造（Red-Black Tree）を用いて実装された連想配列で、キーで要素を管理。キーを元にした検索や挿入が効率的（O(log n)）。

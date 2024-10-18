@@ -15,8 +15,8 @@
 
 #define CSV_DELIMITER ","
 #define INPUT_TXT_DELIMITER " | "
-#define DATE_ERRMSG(DATE) (RED + std::string("Error: bad input => ") + (DATE) + "\n" + DEFAULT)
-#define CONVERT_ERRMSG(TARGET) (RED + std::string("Error: '") + (TARGET) + "' failed to be converted\n" + DEFAULT)
+#define DATE_ERRMSG(DATE) (RED + std::string("Error: bad input => ") + (DATE) + DEFAULT)
+#define CONVERT_ERRMSG(TARGET) (RED + std::string("Error: '") + (TARGET) + "' failed to be converted" + DEFAULT)
 
 // color
 # define BLACK "\x1b[30m"
@@ -42,10 +42,10 @@ class btc {
 		//	date毎のbitcoinの価格。"data.csv"に記載の値
 		std::map<std::string, float> _m_btc_price;
 		static std::map<std::string, float> storeBtcPricePerDateFromCsv(const char *filePath);
-		static float getValidHoldings(std::string line);
 		static void printBtcValue(const std::string &date, float holdings);
 	protected:	//	メソッド単体をテストするため
 		static const std::string getValidDate(const std::string &line, const std::string &delimiter);
+		static float getValidHoldings(const std::string &line, const std::string &delimiter);
 	public:
 		btc();
 		btc(const btc& copy);

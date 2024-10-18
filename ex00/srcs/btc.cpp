@@ -164,9 +164,11 @@ const std::string btc::getValidDate(const std::string &line, const std::string &
 // 	;
 // }
 
-// void printBtcValue(const std::string &date, float holdings) {
-// 	;
-// }
+// e.g. 2011-01-09 => 1 = 0.32
+void printBtcValue(const std::string &date, float holdings, float exchangeRate) {
+	const float btcValue = holdings * exchangeRate;
+	std::cout << date + " => " << exchangeRate << " = " << btcValue << std::endl;
+}
 
 void btc::exchangeSafely(const char *btcHoldingsChartPath) {
 	// 各行ごとに見ていく
@@ -182,9 +184,9 @@ void btc::exchangeSafely(const char *btcHoldingsChartPath) {
 			// quantityを取得する（値チェックを含む）
 			// float holdings = getValidHoldings(line);
 			// 直近のBTCの交換レートを取得する
-			// return getRecentlyExchangeRate();
+			// float exchangeRate = getRecentlyExchangeRate();
 			// BTCの価格を出力する
-			// printBtcValue(date, holdings);
+			// printBtcValue(date, holdings, exchangeRate);
 		}
 		catch(const std::exception& e)
 		{

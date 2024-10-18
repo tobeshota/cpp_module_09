@@ -165,7 +165,7 @@ const std::string btc::getValidDate(const std::string &line, const std::string &
 // e.g. 2011-01-09 => 1 = 0.32
 void printBtcValue(const std::string &date, float holdings, float exchangeRate) {
 	const float btcValue = holdings * exchangeRate;
-	std::cout << date + " => " << exchangeRate << " = " << btcValue << std::endl;
+	std::cout << date + " => " << holdings << " = " << btcValue << std::endl;
 }
 
 void btc::exchangeSafely(const char *btcHoldingsChartPath) {

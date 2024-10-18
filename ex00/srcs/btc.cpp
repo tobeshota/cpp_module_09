@@ -119,7 +119,7 @@ std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePa
 			const std::string &date = getValidDate(line, CSV_DELIMITER);
 			float exchangeRate = getValidExchangeRate(line, CSV_DELIMITER);
 			map[date] = exchangeRate;
-		} catch (const std::exception& e) { std::cerr << e.what() << '\n'; }
+		} catch (const std::exception& e) { ; }
 	}
 	return map;
 }

@@ -19,20 +19,6 @@ static T str2TSafely(const std::string &s, T type) {
 	return fnb;
 }
 
-static void splitKeyAndValueByDelimiter(const std::string& src, const std::string &delim, std::string &key, std::string &value) {
-	// カンマの位置を見つける
-    std::size_t commaPos = src.find(delim);
-
-    if (commaPos != std::string::npos) {
-        // カンマの前の部分をs1に、後の部分をs2に代入
-        key = src.substr(0, commaPos);
-        value = src.substr(commaPos + 1);
-    } else {
-        // カンマが見つからない場合は全体をs1に代入し、s2は空のまま
-        key = src;
-    }
-}
-
 // 文字列を '-' で3つに分割する関数
 // static void splitDate(const std::string& date, int year, int month, int day) {
 //     size_t delim1st = date.find('-');
@@ -46,17 +32,32 @@ static void splitKeyAndValueByDelimiter(const std::string& src, const std::strin
 //     }
 // }
 
+// 文字列を任意の区切り文字で分割し、std::mapに格納する関数
+void splitString(const std::string& src, const std::string& delimiter, std::map<int, std::string>& dest) {
+    size_t start = 0;
+    size_t end = src.find(delimiter);
+    int i = 0;
+
+    // 区切り文字が見つからなくなるまでループ
+    while (end != std::string::npos) {
+        dest[i++] = src.substr(start, end - start);
+        start = end + delimiter.length();
+        end = src.find(delimiter, start);
+    }
+
+    // 最後の部分を追加
+    dest[i] = src.substr(start);
+}
 
 std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePath) {
 	std::map<std::string, float> map;
+    std::map<int, std::string> keyAndValue;
 	std::ifstream infile = openInfileSafely(filePath);
 	std::string line;
 	while (getline(infile, line)) {
-		std::string key, value;
-		splitKeyAndValueByDelimiter(line, CSV_DELIMITER, key, value);
-
+        splitString(line, CSV_DELIMITER, keyAndValue);
 		// float型として型変換することに成功したkeyとvalueの組み合わせのみmapにinsertする
-		try { map.insert(std::make_pair(key, str2TSafely(value, static_cast<float>(4.2f)))); }
+		try { map[keyAndValue[0]] = str2TSafely(keyAndValue[1], static_cast<float>(4.2f)); }
 		catch(const std::exception& e) { ; }
 	}
 	return map;

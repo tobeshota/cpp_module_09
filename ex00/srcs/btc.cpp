@@ -103,30 +103,33 @@ bool isDateValid(std::map<int, std::string> date) {
 	return (date.size() == 3 && isYearValid(date[0]) && isMonthValid(date[1]) && isDayValid(date));
 }
 
+float getValidExchangeRate(const std::string &line, const std::string& delimiter) {
+	std::map<int, std::string> dateAndExchangeRate = splitString(line, delimiter);
+	float exchangeRate = str2TSafely(dateAndExchangeRate[1], static_cast<float>(4.2f));
+	return exchangeRate;
+}
+
+// 有効なdateとexchangeRateのみmapにinsertする
 std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePath) {
 	std::map<std::string, float> map;
 	std::ifstream infile = openInfileSafely(filePath);
 	std::string line;
 	while (getline(infile, line)) {
-        std::map<int, std::string> dateAndExchangeRate = splitString(line, CSV_DELIMITER);
-		const std::map<int, std::string> date = splitString(dateAndExchangeRate[0], "-");
-		// 有効なdateとexchangeRateの組み合わせのみmapにinsertする
 		try {
-			if (isDateValid(date) == false)
-				throw std::invalid_argument(DATE_ERRMSG(dateAndExchangeRate[0]));
-			map[dateAndExchangeRate[0]] = str2TSafely(dateAndExchangeRate[1], static_cast<float>(4.2f));
-		}
-		catch(const std::exception& e) { std::cerr << e.what() << '\n'; }
+			const std::string &date = getValidDate(line, CSV_DELIMITER);
+			float exchangeRate = getValidExchangeRate(line, CSV_DELIMITER);
+			map[date] = exchangeRate;
+		} catch (const std::exception& e) { std::cerr << e.what() << '\n'; }
 	}
 	return map;
 }
 
 btc::btc() {
+	std::cout << "(constructor)btc Default constructor called" << std::endl;
 	// bitcoinの時価一覧表ファイルを読み込む
 	_m_btc_price = storeBtcPricePerDateFromCsv(BTC_MARKET_VALUE_CHART);
-	std::cout << "(constructor)btc Default constructor called" << std::endl;
-	for (std::map<std::string, float>::iterator it = _m_btc_price.begin(); it != _m_btc_price.end(); it++)
-		std::cout << "key: " + it->first + "\t,value: " << it->second << std::endl;
+	// for (std::map<std::string, float>::iterator it = _m_btc_price.begin(); it != _m_btc_price.end(); it++)
+	// 	std::cout << "key: " + it->first + "\t,value: " << it->second << std::endl;
 }
 
 btc::btc(const btc& copy) {
@@ -145,22 +148,16 @@ btc::~btc()
 	std::cout << "(constructor)btc destructor called" << std::endl;
 }
 
-void btc::getValidDate(std::string line) {
+const std::string btc::getValidDate(const std::string &line, const std::string &delimiter) {
 	// lineからdate部分を抜き出す
-	std::map<int, std::string> dateAndHoldings = splitString(line, INPUT_TXT_DELIMITER);
+	std::map<int, std::string> dateAndHoldings = splitString(line, delimiter);
 	const std::map<int, std::string> date = splitString(dateAndHoldings[0], "-");
-
-    // std::cout << "(raw:" + line + ")\tyear: " + date.at(0);
-	// std::cout << "\tmonth: " + date.at(1);
-	// std::cout << "\tday: " << date.at(2) << std::endl;
-
 
 	// dateが不正のときにエラーが出せる
 	if (isDateValid(date) == false)
 		throw std::invalid_argument(DATE_ERRMSG(dateAndHoldings[0]));
 
-	// レート計算で使用するための直近の日付を探してくる
-	// return getRecentlyExchangeRate();
+	return dateAndHoldings[0];
 }
 
 // float getValidHoldings(std::string line) {
@@ -180,10 +177,12 @@ void btc::exchangeSafely(const char *btcHoldingsChartPath) {
 		try
 		{
 			// dateを取得する（値チェックを含む）
-			// const std::string &date = getValidDate(line);
-			getValidDate(line);
+			const std::string &date = getValidDate(line, INPUT_TXT_DELIMITER);
+			std::cout << "{" + date + "}" << std::endl;;
 			// quantityを取得する（値チェックを含む）
 			// float holdings = getValidHoldings(line);
+			// 直近のBTCの交換レートを取得する
+			// return getRecentlyExchangeRate();
 			// BTCの価格を出力する
 			// printBtcValue(date, holdings);
 		}

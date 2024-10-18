@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.14)
 # プロジェクト名と使用する言語を設定
 project(my_project)
 
+# 条件付きでTESTマクロを定義
+if(DEFINED TEST_BY_GTEST)
+  add_compile_definitions(TEST_BY_GTEST)  # #define TEST_BY_GTEST と同義
+endif()
+
 # GoogleTest requires at least C++14
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

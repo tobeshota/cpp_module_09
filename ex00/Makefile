@@ -6,7 +6,7 @@
 #    By: tobeshota <tobeshota@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/12 09:34:52 by tobeshota         #+#    #+#              #
-#    Updated: 2024/09/24 14:40:10 by tobeshota        ###   ########.fr        #
+#    Updated: 2024/10/18 17:43:05 by tobeshota        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,10 +30,6 @@ endif
 
 ifeq ($(MAKECMDGOALS), address)
 	FLAGS += -g3 -fsanitize=address
-endif
-
-ifeq ($(MAKECMDGOALS), test)
-	FLAGS += -DTEST
 endif
 
 all: $(NAME)

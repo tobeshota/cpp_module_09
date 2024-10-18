@@ -4,8 +4,15 @@
 #include <sstream>
 #include <map>
 
+#ifdef TEST_BY_GTEST	// `make test`によるGoogleTest実行時のcwd"./test/build"から見たファイルパス
+#define BTC_MARKET_VALUE_CHART "../../srcs/data.csv"
+#define BTC_HOLDINGS_CHART "../../srcs/input.txt"
+#else	//	`make`により生成した実行ファイル実行時のcwd"./"からみたファイルパス
 #define BTC_MARKET_VALUE_CHART "./srcs/data.csv"
 #define BTC_HOLDINGS_CHART "./srcs/input.txt"
+#endif
+
+
 #define CSV_DELIMITER ","
 #define INPUT_TXT_DELIMITER " | "
 #define DATE_ERRMSG(DATE) (RED + std::string("Error: bad input => ") + (DATE) + "\n" + DEFAULT)
@@ -35,13 +42,17 @@ class btc {
 		//	date毎のbitcoinの価格。"data.csv"に記載の値
 		std::map<std::string, float> _m_btc_price;
 		static std::map<std::string, float> storeBtcPricePerDateFromCsv(const char *filePath);
-		static void getValidDate(std::string line);
 		static float getValidHoldings(std::string line);
 		static void printBtcValue(const std::string &date, float holdings);
+	protected:	//	メソッド単体をテストするため
+		static const std::string getValidDate(const std::string &line, const std::string &delimiter);
 	public:
 		btc();
 		btc(const btc& copy);
 		btc& operator=(const btc& copy);
 		~btc();
 		static void exchangeSafely(const char *btcHoldingsChartPath);
+	#ifdef TEST
+	friend class BTCTest;
+	#endif
 };

@@ -5,7 +5,7 @@ BUILD_DIR	=	build/
 SRCS		=	$(wildcard $(SRCS_DIR)*.cpp)
 
 test:
-	@ cmake -S . -B build
+	@ cmake -S . -B build -DTEST_BY_GTEST=1	# ビルド時にTEST_BY_GTESTが定義される.実行プロセスがGoogleTestによるものであることを確認するために定義することにした
 	@ cmake --build build
 	@ cd build && ctest --output-on-failure
 

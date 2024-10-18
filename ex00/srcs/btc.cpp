@@ -33,9 +33,9 @@ static T str2TSafely(const std::string &s, T type) {
 // }
 
 // 文字列を任意の区切り文字で分割し、std::mapに格納する関数
-void splitString(const std::string& src, const std::string& delimiter, std::map<int, std::string>& dest) {
-    size_t start = 0;
-    size_t end = src.find(delimiter);
+std::map<int, std::string> splitString(const std::string& src, const std::string& delimiter) {
+    std::map<int, std::string> dest;
+	size_t start = 0, end = src.find(delimiter);
     int i = 0;
 
     // 区切り文字が見つからなくなるまでループ
@@ -47,15 +47,15 @@ void splitString(const std::string& src, const std::string& delimiter, std::map<
 
     // 最後の部分を追加
     dest[i] = src.substr(start);
+	return dest;
 }
 
 std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePath) {
 	std::map<std::string, float> map;
-    std::map<int, std::string> keyAndValue;
 	std::ifstream infile = openInfileSafely(filePath);
 	std::string line;
 	while (getline(infile, line)) {
-        splitString(line, CSV_DELIMITER, keyAndValue);
+        std::map<int, std::string> keyAndValue = splitString(line, CSV_DELIMITER);
 		// float型として型変換することに成功したkeyとvalueの組み合わせのみmapにinsertする
 		try { map[keyAndValue[0]] = str2TSafely(keyAndValue[1], static_cast<float>(4.2f)); }
 		catch(const std::exception& e) { ; }
@@ -87,17 +87,30 @@ btc::~btc()
 	std::cout << "(constructor)btc destructor called" << std::endl;
 }
 
-// bool isDateValid(std::string date) {
+// bool isDateValid(std::map<int, std::string> date) {
+//     const std::string &year = date[0];
+//     const std::string &month = date[1];
+//     const std::string &day = date[2];
 
 // }
 
-// const std::string &btc::getValidDate(std::string line) {
-// 	std::string date, holdings;
-// 	splitKeyAndValueByDelimiter(line, INPUT_TXT_DELIMITER, date, holdings);
-// 	// dateが不正のときにエラーが出せる
-// 	// if (isDateValid(date) == false)
-// 		throw std::invalid_argument(DATE_ERRMSG(date));
-// }
+void btc::getValidDate(std::string line) {
+	// lineからdate部分を抜き出す
+	std::map<int, std::string> dateAndHoldings = splitString(line, INPUT_TXT_DELIMITER);
+	const std::map<int, std::string> date = splitString(dateAndHoldings[0], "-");
+
+    std::cout << "(raw:" + line + ")\tyear: " + date.at(0);
+	std::cout << "\tmonth: " + date.at(1);
+	std::cout << "\tday: " << date.at(2) << std::endl;
+
+
+	// dateが不正のときにエラーが出せる
+	// if (isDateValid(date) == false)
+	// 	throw std::invalid_argument(DATE_ERRMSG(date));
+
+	// レート計算で使用するための直近の日付を探してくる
+	// return getRecentlyDateForBTCPriceCalculation();
+}
 
 // float getValidHoldings(std::string line) {
 // 	;
@@ -107,24 +120,25 @@ btc::~btc()
 // 	;
 // }
 
-// void btc::exchangeSafely(const char *tableOfBtcHolingsPerDate) {
-// 	// 各行ごとに見ていく
-// 	std::ifstream infile = openInfileSafely(tableOfBtcHolingsPerDate);
-// 	std::string line;
-// 	// 入力ファイルを読み込む
-// 	while (std::getline(infile, line)) {
-// 		try
-// 		{
-// 			// dateを取得する（値チェックを含む）
-// 			const std::string &date = getValidDate(line);
-// 			// quantityを取得する（値チェックを含む）
-// 			float holdings = getValidHoldings(line);
-// 			// BTCの価格を出力する
-// 			printBtcValue(date, holdings);
-// 		}
-// 		catch(const std::exception& e)
-// 		{
-// 			std::cerr << e.what() << '\n';
-// 		}
-// 	}
-// }
+void btc::exchangeSafely(const char *btcHoldingsChartPath) {
+	// 各行ごとに見ていく
+	std::ifstream infile = openInfileSafely(btcHoldingsChartPath);
+	std::string line;
+	// 入力ファイルを読み込む
+	while (std::getline(infile, line)) {
+		try
+		{
+			// dateを取得する（値チェックを含む）
+			// const std::string &date = getValidDate(line);
+			getValidDate(line);
+			// quantityを取得する（値チェックを含む）
+			// float holdings = getValidHoldings(line);
+			// BTCの価格を出力する
+			// printBtcValue(date, holdings);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+		}
+	}
+}

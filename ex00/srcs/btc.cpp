@@ -1,5 +1,19 @@
 #include "btc.hpp"
 
+// static void hi(void)
+// {
+// 	static int count;
+// 	std::cout << "hi!(" << count << ")\n";
+// 	count++;
+// }
+
+// static void msg(std::string str)
+// {
+// 	static int count;
+// 	std::cout << str + "(" << count << ")\n";
+// 	count++;
+// }
+
 static std::ifstream openInfileSafely(const char *infilePath) {
 	std::ifstream infile(infilePath);
 	if(!infile)	throw std::invalid_argument("infile couldn't open");
@@ -19,19 +33,6 @@ static T str2TSafely(const std::string &s, T type) {
 	return fnb;
 }
 
-// 文字列を '-' で3つに分割する関数
-// static void splitDate(const std::string& date, int year, int month, int day) {
-//     size_t delim1st = date.find('-');
-//     if (delim1st != std::string::npos) {
-//         year = date.substr(0, delim1st);
-//         size_t delim2nd = date.find('-', delim1st + 1);
-//         if (delim2nd != std::string::npos) {
-//             month = date.substr(delim1st + 1, delim2nd - delim1st - 1);
-//             day = date.substr(delim2nd + 1);
-//         }
-//     }
-// }
-
 // 文字列を任意の区切り文字で分割し、std::mapに格納する関数
 std::map<int, std::string> splitString(const std::string& src, const std::string& delimiter) {
     std::map<int, std::string> dest;
@@ -50,15 +51,72 @@ std::map<int, std::string> splitString(const std::string& src, const std::string
 	return dest;
 }
 
+// strが0-9で構成されているか調べる
+bool isAllDigits(const std::string& str) {
+	if (str.empty())
+		return false;
+	for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
+        if (!std::isdigit(*it))
+            return false; // 1つでも数字でない文字があればfalseを返す
+    }
+    return true; // 全て数字ならtrueを返す
+}
+
+bool isNumWithinRange(int num, int min, int max) {
+	return (num >= min && num <= max);
+}
+
+bool isYearValid(const std::string &year) {
+	return isAllDigits(year);
+}
+
+bool isMonthValid(const std::string &month) {
+	try {
+		bool isLengthValid = isNumWithinRange(month.length(), 1, 2);
+		bool between1And12 = isNumWithinRange(str2TSafely(month, static_cast<int>(42)), 1, 12);
+		return isAllDigits(month) && isLengthValid && between1And12;
+	}
+	catch (const std::exception& e) { return false; }
+}
+
+bool isLeapYear(const std::string &year) {
+	try {
+		const int intYear = str2TSafely(year, static_cast<int>(42));
+		return (intYear % 400 == 0) || (intYear % 4 == 0 && intYear % 100 != 0);
+	}
+	catch (const std::exception& e) { return false; }
+}
+
+bool isDayValid(std::map<int, std::string> date) {
+	int daysOfMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	if (isLeapYear(date.at(0)) == true)
+		daysOfMonth[1]++;
+	try {
+		const int month = str2TSafely(date[1], static_cast<int>(42));
+		const int day = str2TSafely(date[2], static_cast<int>(42));
+		return (day >= 1 && day <= daysOfMonth[month - 1]);
+	}
+	catch (const std::exception& e) { return false; }
+}
+
+bool isDateValid(std::map<int, std::string> date) {
+	return (date.size() == 3 && isYearValid(date[0]) && isMonthValid(date[1]) && isDayValid(date));
+}
+
 std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePath) {
 	std::map<std::string, float> map;
 	std::ifstream infile = openInfileSafely(filePath);
 	std::string line;
 	while (getline(infile, line)) {
-        std::map<int, std::string> keyAndValue = splitString(line, CSV_DELIMITER);
-		// float型として型変換することに成功したkeyとvalueの組み合わせのみmapにinsertする
-		try { map[keyAndValue[0]] = str2TSafely(keyAndValue[1], static_cast<float>(4.2f)); }
-		catch(const std::exception& e) { ; }
+        std::map<int, std::string> dateAndExchangeRate = splitString(line, CSV_DELIMITER);
+		const std::map<int, std::string> date = splitString(dateAndExchangeRate[0], "-");
+		// 有効なdateとexchangeRateの組み合わせのみmapにinsertする
+		try {
+			if (isDateValid(date) == false)
+				throw std::invalid_argument(DATE_ERRMSG(dateAndExchangeRate[0]));
+			map[dateAndExchangeRate[0]] = str2TSafely(dateAndExchangeRate[1], static_cast<float>(4.2f));
+		}
+		catch(const std::exception& e) { std::cerr << e.what() << '\n'; }
 	}
 	return map;
 }
@@ -87,29 +145,22 @@ btc::~btc()
 	std::cout << "(constructor)btc destructor called" << std::endl;
 }
 
-// bool isDateValid(std::map<int, std::string> date) {
-//     const std::string &year = date[0];
-//     const std::string &month = date[1];
-//     const std::string &day = date[2];
-
-// }
-
 void btc::getValidDate(std::string line) {
 	// lineからdate部分を抜き出す
 	std::map<int, std::string> dateAndHoldings = splitString(line, INPUT_TXT_DELIMITER);
 	const std::map<int, std::string> date = splitString(dateAndHoldings[0], "-");
 
-    std::cout << "(raw:" + line + ")\tyear: " + date.at(0);
-	std::cout << "\tmonth: " + date.at(1);
-	std::cout << "\tday: " << date.at(2) << std::endl;
+    // std::cout << "(raw:" + line + ")\tyear: " + date.at(0);
+	// std::cout << "\tmonth: " + date.at(1);
+	// std::cout << "\tday: " << date.at(2) << std::endl;
 
 
 	// dateが不正のときにエラーが出せる
-	// if (isDateValid(date) == false)
-	// 	throw std::invalid_argument(DATE_ERRMSG(date));
+	if (isDateValid(date) == false)
+		throw std::invalid_argument(DATE_ERRMSG(dateAndHoldings[0]));
 
 	// レート計算で使用するための直近の日付を探してくる
-	// return getRecentlyDateForBTCPriceCalculation();
+	// return getRecentlyExchangeRate();
 }
 
 // float getValidHoldings(std::string line) {

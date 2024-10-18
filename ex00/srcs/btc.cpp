@@ -125,7 +125,6 @@ std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePa
 }
 
 btc::btc() {
-	std::cout << "(constructor)btc Default constructor called" << std::endl;
 	// bitcoinの時価一覧表ファイルを読み込む
 	_m_btc_price = storeBtcPricePerDateFromCsv(BTC_MARKET_VALUE_CHART);
 	// for (std::map<std::string, float>::iterator it = _m_btc_price.begin(); it != _m_btc_price.end(); it++)
@@ -134,7 +133,6 @@ btc::btc() {
 
 btc::btc(const btc& copy) {
 	*this = copy;
-	std::cout << "(constructor)btc Copy constructor called" << std::endl;
 }
 
 btc& btc::operator=(const btc& copy) {
@@ -145,7 +143,7 @@ btc& btc::operator=(const btc& copy) {
 
 btc::~btc()
 {
-	std::cout << "(constructor)btc destructor called" << std::endl;
+	;
 }
 
 const std::string btc::getValidDate(const std::string &line, const std::string &delimiter) {

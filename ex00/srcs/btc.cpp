@@ -1,22 +1,8 @@
 #include "btc.hpp"
 
-// static void hi(void)
-// {
-// 	static int count;
-// 	std::cout << "hi!(" << count << ")\n";
-// 	count++;
-// }
-
-// static void msg(std::string str)
-// {
-// 	static int count;
-// 	std::cout << str + "(" << count << ")\n";
-// 	count++;
-// }
-
 static std::ifstream openInfileSafely(const char *infilePath) {
 	std::ifstream infile(infilePath);
-	if(!infile)	throw std::invalid_argument("infile couldn't open");
+	if(!infile)	throw std::invalid_argument(std::string(RED) + "infile couldn't open" + std::string(DEFAULT));
 	return infile;
 }
 
@@ -110,14 +96,14 @@ float getValidExchangeRate(const std::string &line, const std::string& delimiter
 }
 
 // 有効なdateとexchangeRateのみmapにinsertする
-std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePath) {
+std::map<std::string, float> btc::storeValidBTCMarketValueChart(const char *filePath, const std::string &delimiter) {
 	std::map<std::string, float> map;
 	std::ifstream infile = openInfileSafely(filePath);
 	std::string line;
 	while (getline(infile, line)) {
 		try {
-			const std::string &date = getValidDate(line, CSV_DELIMITER);
-			float exchangeRate = getValidExchangeRate(line, CSV_DELIMITER);
+			const std::string &date = getValidDate(line, delimiter);
+			float exchangeRate = getValidExchangeRate(line, delimiter);
 			map[date] = exchangeRate;
 		} catch (const std::exception& e) { ; }
 	}
@@ -126,8 +112,8 @@ std::map<std::string, float> btc::storeBtcPricePerDateFromCsv(const char *filePa
 
 btc::btc() {
 	// bitcoinの時価一覧表ファイルを読み込む
-	_m_btc_price = storeBtcPricePerDateFromCsv(BTC_MARKET_VALUE_CHART);
-	// for (std::map<std::string, float>::iterator it = _m_btc_price.begin(); it != _m_btc_price.end(); it++)
+	_m_BTCMarketValueChart = storeValidBTCMarketValueChart(BTC_MARKET_VALUE_CHART_PATH, CSV_DELIMITER);
+	// for (std::map<std::string, float>::iterator it = _m_BTCMarketValueChart.begin(); it != _m_BTCMarketValueChart.end(); it++)
 	// 	std::cout << "key: " + it->first + "\t,value: " << it->second << std::endl;
 }
 
@@ -137,7 +123,7 @@ btc::btc(const btc& copy) {
 
 btc& btc::operator=(const btc& copy) {
 	if (this != &copy)
-		this->_m_btc_price = copy._m_btc_price;
+		this->_m_BTCMarketValueChart = copy._m_BTCMarketValueChart;
 	return *this;
 }
 
@@ -158,14 +144,39 @@ const std::string btc::getValidDate(const std::string &line, const std::string &
 	return dateAndHoldings[0];
 }
 
-// float getValidHoldings(std::string line) {
-// 	;
-// }
+float btc::getValidHoldings(const std::string &line, const std::string &delimiter) {
+	// lineからholdings部分を抜き出す
+	std::map<int, std::string> dateAndHoldings = splitString(line, delimiter);
+	// holdingsが不正(float型に変換できない，値域が0-1000外である)のときにエラーが出せる
+	float holdings = str2TSafely(dateAndHoldings[1], static_cast<float>(4.2f));
+	if (holdings < 0)
+		throw std::invalid_argument(std::string(RED) + "Error: not a positive number." + std::string(DEFAULT));
+	else if (holdings > 1000)
+		throw std::invalid_argument(std::string(RED) + "Error: too large a number." + std::string(DEFAULT));
+	return holdings;
+}
 
 // e.g. 2011-01-09 => 1 = 0.32
-void printBtcValue(const std::string &date, float holdings, float exchangeRate) {
+void btc::printBtcValue(const std::string &date, float holdings, float exchangeRate) {
 	const float btcValue = holdings * exchangeRate;
 	std::cout << date + " => " << holdings << " = " << btcValue << std::endl;
+}
+
+float btc::getRecentlyExchangeRateSafely(const std::string& date) {
+	// float exchangeRate
+	// `lower_bound` を使って指定されたdate以上の最初のイテレータを取得する
+	std::map<std::string, float>::iterator it = _m_BTCMarketValueChart.lower_bound(date);
+
+	// 指定されたdateが存在する場合，その交換レートを返す
+	if (it != _m_BTCMarketValueChart.end() && it->first == date)
+		return it->second;
+	// 指定されたdateが存在しない場合，直前の交換レートを返す
+	else if (it != _m_BTCMarketValueChart.begin()) {
+		it--;
+		return it->second;
+	}
+	throw std::invalid_argument("exchange rate not found");
+	return 0.0f;	//	ここには来ない
 }
 
 void btc::exchangeSafely(const char *btcHoldingsChartPath) {
@@ -178,13 +189,16 @@ void btc::exchangeSafely(const char *btcHoldingsChartPath) {
 		{
 			// dateを取得する（値チェックを含む）
 			const std::string &date = getValidDate(line, INPUT_TXT_DELIMITER);
-			std::cout << "{" + date + "}" << std::endl;;
+			// std::cout << "{" << date << "}" << std::endl;
 			// quantityを取得する（値チェックを含む）
-			// float holdings = getValidHoldings(line);
+			float holdings = getValidHoldings(line, INPUT_TXT_DELIMITER);
+			// std::cout << "{" << holdings << "}" << std::endl;
+
 			// 直近のBTCの交換レートを取得する
-			// float exchangeRate = getRecentlyExchangeRate();
-			// BTCの価格を出力する
-			// printBtcValue(date, holdings, exchangeRate);
+			float exchangeRate = getRecentlyExchangeRateSafely(date);
+			// std::cout << "{" << exchangeRate << "}" << std::endl;
+
+			printBtcValue(date, holdings, exchangeRate);
 		}
 		catch(const std::exception& e)
 		{

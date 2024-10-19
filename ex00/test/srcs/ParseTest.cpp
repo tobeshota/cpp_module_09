@@ -23,7 +23,9 @@ TEST_F(BTCTest, getValidDateFormatKOTest) {
   EXPECT_THROW(b->getValidDate("2023-05-16- | 3", INPUT_TXT_DELIMITER), std::invalid_argument);
   EXPECT_THROW(b->getValidDate("-2023-05-16 | 3", INPUT_TXT_DELIMITER), std::invalid_argument);
   EXPECT_THROW(b->getValidDate("-2023-05-16- | 3", INPUT_TXT_DELIMITER), std::invalid_argument);
+}
 
+TEST_F(BTCTest, getValidDateDateKOTest) {
   // ----- 年がおかしい -----
   // 年が0-9で構成されていない
   EXPECT_THROW(b->getValidDate("2?23-05-16 | 3", INPUT_TXT_DELIMITER), std::invalid_argument);

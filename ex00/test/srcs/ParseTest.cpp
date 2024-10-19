@@ -1,6 +1,6 @@
 #include "TestUtils.hpp"
 
-TEST_F(BTCTest, getValidDateNormalTest) {
+TEST_F(BTCTest, getValidDateOKTest) {
   // ----- 基本的なテスト -----
   EXPECT_EQ("2001-01-1", b->getValidDate("2001-01-1 | 3", INPUT_TXT_DELIMITER));
   EXPECT_EQ("2023-05-16", b->getValidDate("2023-05-16 | 3", INPUT_TXT_DELIMITER));

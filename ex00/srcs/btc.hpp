@@ -53,7 +53,4 @@ class btc {
 		btc& operator=(const btc& copy);
 		~btc();
 		void exchangeSafely(const char *btcHoldingsChartPath);
-	#ifdef TEST
-	friend class BTCTest;
-	#endif
 };

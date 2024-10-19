@@ -1,10 +1,10 @@
 #include "TestUtils.hpp"
 
-std::string float2str(float fnb) {
-  std::stringstream ss;
-  ss << fnb;
-  return ss.str();
-}
+// std::string float2str(float fnb) {
+//   std::stringstream ss;
+//   ss << fnb;
+//   return ss.str();
+// }
 
 TEST_F(BTCTest, getValidDateOKTest) {
   // ----- 基本的なテスト -----
@@ -76,10 +76,10 @@ TEST_F(BTCTest, getValidDateDateKOTest) {
 
 TEST_F(BTCTest, getValidHoldingsOKTest) {
   // ----- 基本的なテスト(0-1000以内の浮動小数点数または正の整数) -----
-  EXPECT_EQ("0", float2str(b->getValidHoldings("2023-05-16 | 0", INPUT_TXT_DELIMITER)));
-  EXPECT_EQ("42", float2str(b->getValidHoldings("2023-05-16 | 42", INPUT_TXT_DELIMITER)));
-  EXPECT_EQ("42.195", float2str(b->getValidHoldings("2023-05-16 | 42.195", INPUT_TXT_DELIMITER)));
-  EXPECT_EQ("1000", float2str(b->getValidHoldings("2001-12-31 | 1000", INPUT_TXT_DELIMITER)));
+  EXPECT_EQ(0, b->getValidHoldings("2023-05-16 | 0", INPUT_TXT_DELIMITER));
+  EXPECT_EQ(42, b->getValidHoldings("2023-05-16 | 42", INPUT_TXT_DELIMITER));
+  EXPECT_EQ((float)42.195, b->getValidHoldings("2023-05-16 | 42.195", INPUT_TXT_DELIMITER));
+  EXPECT_EQ(1000, b->getValidHoldings("2001-12-31 | 1000", INPUT_TXT_DELIMITER));
 }
 
 TEST_F(BTCTest, getValidHoldingsFormatKOTest) {

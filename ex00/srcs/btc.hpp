@@ -46,8 +46,8 @@ class btc {
 	protected:	//	メソッド単体をテストするため
 		static const std::string getValidDate(const std::string &line, const std::string &delimiter);
 		static float getValidHoldings(const std::string &line, const std::string &delimiter);
-		float getRecentlyExchangeRateSafely(const std::string& date);
 	public:
+		float getRecentlyExchangeRateSafely(const std::string& date);	//	メソッド単体をテストし，同関数内でprivate属性のメンバ変数にアクセスするためpublicにした
 		btc();
 		btc(const btc& copy);
 		btc& operator=(const btc& copy);

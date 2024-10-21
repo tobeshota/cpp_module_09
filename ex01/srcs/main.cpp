@@ -1,9 +1,12 @@
 #include "RPN.hpp"
 
+static bool isArgValid(int argc, char **argv) {
+  return (argc == 2 && argv[1][0] != '\0');
+}
+
 int main(int argc, char **argv) {
-  if (argc != 2) {
+  if (isArgValid(argc, argv) == false)
     std::cerr << "Usage: ./RPN \"1 2 * 2 / 2 * 2 4 - +\"" << std::endl;
-    return EXIT_FAILURE;
-  }
-  rpn(std::string(argv[1]));
+  else
+    rpn(std::string(argv[1]));
 }

@@ -46,6 +46,8 @@ static int getOperatorSafely(const std::string& str) {
 
 void rpn(const std::string& input) {
   try {
+    if (input.empty())
+      throw std::invalid_argument("Error: arguments are empty");
     std::istringstream ss(input);
     std::string elem;
     std::stack<int> stack;

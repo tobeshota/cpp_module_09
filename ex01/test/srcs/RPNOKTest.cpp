@@ -1,5 +1,6 @@
 /* 正常系のテスト */
 #include <gtest/gtest.h>
+
 #include "RPN.hpp"
 
 static std::string getRPNStdout(const std::string& input) {

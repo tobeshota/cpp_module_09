@@ -28,6 +28,8 @@ TEST(KO, TooFewInput) {
   EXPECT_EQ(getRPNStderr("3 +"), "Error: Stack size is less than 2\n");
   EXPECT_EQ(getRPNStderr("3 2 + -"), "Error: Stack size is less than 2\n");
   EXPECT_EQ(getRPNStderr("*"), "Error: Stack size is less than 2\n");
+  EXPECT_EQ(getRPNStderr("2 4 4"),
+            "Error: number of operators is Insufficient\n");
   EXPECT_EQ(getRPNStderr(""), "Error: arguments are empty\n");
 }
 

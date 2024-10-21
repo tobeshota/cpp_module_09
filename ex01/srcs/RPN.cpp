@@ -44,6 +44,12 @@ static int getOperatorSafely(const std::string& str) {
   return 0;
 }
 
+void printResultSafely(const std::stack<int>& stack) {
+  if (stack.size() != 1)
+    throw std::invalid_argument("Error: number of operators is Insufficient");
+  std::cout << stack.top() << std::endl;
+}
+
 void rpn(const std::string& input) {
   try {
     if (input.empty())
@@ -58,8 +64,7 @@ void rpn(const std::string& input) {
       else  // 演算子の場合，安全に演算する
         calaculateSafely(stack, getOperatorSafely(elem));
     }
-    // 計算結果を出力する
-    std::cout << stack.top() << std::endl;
+    printResultSafely(stack);
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
   }

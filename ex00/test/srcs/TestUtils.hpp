@@ -3,17 +3,17 @@
 
 #include <string>
 
-#include "btc.hpp"
+#include "BitcoinExchange.hpp"
 
-class BTCTest : public ::testing::Test, public btc {
+class BTCTest : public ::testing::Test, public BitcoinExchange {
  protected:
   // テストの前に実行される処理
   void SetUp() override {
     // テスト用にオブジェクトを初期化
-    b = new btc();
+    b = new BitcoinExchange();
   }
   // テストの後に実行される処理
   void TearDown() override { delete b; }
   // テストで使うメンバ変数
-  btc* b;
+  BitcoinExchange* b;
 };

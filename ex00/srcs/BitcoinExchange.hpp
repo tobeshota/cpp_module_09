@@ -43,7 +43,7 @@
 
 // data.csv:  date毎のbitcoinの価格(price)が記載されている
 // input.txt: date毎のbitcoinの量(value, quantity)が記載されている
-class btc {
+class BitcoinExchange {
  private:
   //	date毎のbitcoinの価格。"data.csv"に記載の値
   std::map<std::string, float> _m_BTCMarketValueChart;
@@ -62,9 +62,9 @@ class btc {
   float getRecentlyExchangeRateSafely(
       const std::string
           &date);  //	メソッド単体をテストし，同関数内でprivate属性のメンバ変数にアクセスするためpublicにした
-  btc();
-  btc(const btc &copy);
-  btc &operator=(const btc &copy);
-  ~btc();
-  void exchangeSafely(const char *btcHoldingsChartPath);
+  BitcoinExchange();
+  BitcoinExchange(const BitcoinExchange &copy);
+  BitcoinExchange &operator=(const BitcoinExchange &copy);
+  ~BitcoinExchange();
+  void exchangeSafely(const char *BtcHoldingsChartPath);
 };

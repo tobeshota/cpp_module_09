@@ -1,6 +1,6 @@
-#include "btc.hpp"
+#include "BitcoinExchange.hpp"
 
 int main(void) {
-  btc b = btc();
+  BitcoinExchange b = BitcoinExchange();
   b.exchangeSafely(BTC_HOLDINGS_CHART);
 }

@@ -1,5 +1,6 @@
 #include "btc.hpp"
 
+// 指定したパスのファイルを安全に開き、開けなければ例外を投げる
 static std::ifstream openInfileSafely(const char *infilePath) {
   std::ifstream infile(infilePath);
   if (!infile)
@@ -8,7 +9,7 @@ static std::ifstream openInfileSafely(const char *infilePath) {
   return infile;
 }
 
-// 文字列を特定の型に変換
+// 文字列を指定された型に安全に変換する。変換が失敗した場合は例外を投げる。
 template <typename T>
 static T str2TSafely(const std::string &s, T type) {
   (void)type;  // 型推論のために使わない引数
@@ -20,7 +21,7 @@ static T str2TSafely(const std::string &s, T type) {
   return fnb;
 }
 
-// 文字列を任意の区切り文字で分割し、std::mapに格納する関数
+// 文字列を指定された区切り文字で分割し、インデックスをキーにしたmapに格納する
 std::map<int, std::string> splitString(const std::string &src,
                                        const std::string &delimiter) {
   std::map<int, std::string> dest;
@@ -39,7 +40,7 @@ std::map<int, std::string> splitString(const std::string &src,
   return dest;
 }
 
-// strが0-9で構成されているか調べる
+// 文字列がすべて数字で構成されているかを確認する
 bool isAllDigits(const std::string &str) {
   if (str.empty()) return false;
   for (std::string::const_iterator it = str.begin(); it != str.end(); ++it) {
@@ -92,6 +93,7 @@ bool isDateValid(std::map<int, std::string> date) {
           isDayValid(date));
 }
 
+// ビットコインの交換レートを文字列から安全に取得し、無効な場合は例外を投げる
 float getValidExchangeRate(const std::string &line,
                            const std::string &delimiter) {
   std::map<int, std::string> dateAndExchangeRate = splitString(line, delimiter);
@@ -133,6 +135,7 @@ btc &btc::operator=(const btc &copy) {
 
 btc::~btc() { ; }
 
+// 文字列から有効な日付を取得し、無効な場合は例外を投げる
 const std::string btc::getValidDate(const std::string &line,
                                     const std::string &delimiter) {
   // lineからdate部分を抜き出す
@@ -146,6 +149,7 @@ const std::string btc::getValidDate(const std::string &line,
   return dateAndHoldings[0];
 }
 
+// 文字列から有効な保有量を取得し、無効な場合は例外を投げる
 float btc::getValidHoldings(const std::string &line,
                             const std::string &delimiter) {
   // lineからholdings部分を抜き出す
@@ -162,13 +166,14 @@ float btc::getValidHoldings(const std::string &line,
   return holdings;
 }
 
-// e.g. 2011-01-09 => 1 = 0.32
+// ビットコインの計算結果を出力する
 void btc::printBtcValue(const std::string &date, float holdings,
                         float exchangeRate) {
   const float btcValue = holdings * exchangeRate;
   std::cout << date + " => " << holdings << " = " << btcValue << std::endl;
 }
 
+// 指定された日付の直近の交換レートを取得し、無効な場合は例外を投げる
 float btc::getRecentlyExchangeRateSafely(const std::string &date) {
   // `lower_bound` を使って指定されたdate以上の最初のイテレータを取得する
   std::map<std::string, float>::iterator it =

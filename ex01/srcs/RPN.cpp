@@ -52,11 +52,10 @@ void rpn(const std::string& input) {
     std::string elem;
     std::stack<int> stack;
     while (std::getline(ss, elem, ARGV_DELIMITER)) {
-      // 要素が1桁の数字ならばstackに安全に格納する
-      if (isAllDigits(elem) &&
-          elem.length() == 1)  //	数字の場合，stackに安全に格納する
+      // 1桁の数字の場合，stackに安全に格納する
+      if (isAllDigits(elem) && elem.length() == 1)
         stack.push(str2TSafely(elem, static_cast<int>(42)));
-      else  //	演算子の場合，安全に演算する
+      else  // 演算子の場合，安全に演算する
         calaculateSafely(stack, getOperatorSafely(elem));
     }
     // 計算結果を出力する

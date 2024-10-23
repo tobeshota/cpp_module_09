@@ -1,26 +1,5 @@
 #include "BitcoinExchange.hpp"
 
-// 指定したパスのファイルを安全に開き、開けなければ例外を投げる
-static std::ifstream openInfileSafely(const char *infilePath) {
-  std::ifstream infile(infilePath);
-  if (!infile)
-    throw std::invalid_argument(std::string(RED) + "infile couldn't open" +
-                                std::string(DEFAULT));
-  return infile;
-}
-
-// 文字列を指定された型に安全に変換する。変換が失敗した場合は例外を投げる。
-template <typename T>
-static T str2TSafely(const std::string &s, T type) {
-  (void)type;  // 型推論のために使わない引数
-  std::stringstream ss(s);
-  T fnb;
-  ss >> fnb;
-  // 変換が失敗した場合、または残った文字列がある場合は例外を投げる
-  if (ss.fail() || !ss.eof()) throw std::invalid_argument(CONVERT_ERRMSG(s));
-  return fnb;
-}
-
 // 文字列を指定された区切り文字で分割し、インデックスをキーにしたmapに格納する
 std::map<int, std::string> splitString(const std::string &src,
                                        const std::string &delimiter) {
@@ -106,7 +85,10 @@ float getValidExchangeRate(const std::string &line,
 std::map<std::string, float> BitcoinExchange::storeValidBTCMarketValueChart(
     const char *filePath, const std::string &delimiter) {
   std::map<std::string, float> map;
-  std::ifstream infile = openInfileSafely(filePath);
+  std::ifstream infile(filePath);
+  if (!infile)
+    throw std::invalid_argument(std::string(RED) + "infile couldn't open" +
+                                std::string(DEFAULT));
   std::string line;
   while (getline(infile, line)) {
     try {
@@ -192,10 +174,12 @@ float BitcoinExchange::getRecentlyExchangeRateSafely(const std::string &date) {
 }
 
 void BitcoinExchange::exchangeSafely(const char *BtcHoldingsChartPath) {
-  // 各行ごとに見ていく
-  std::ifstream infile = openInfileSafely(BtcHoldingsChartPath);
+  std::ifstream infile(BtcHoldingsChartPath);
+  if (!infile)
+    throw std::invalid_argument(std::string(RED) + "infile couldn't open" +
+                                std::string(DEFAULT));
   std::string line;
-  // 入力ファイルを読み込む
+  // 各行ごとに見ていく
   while (std::getline(infile, line)) {
     try {
       // dateを取得する（値チェックを含む）

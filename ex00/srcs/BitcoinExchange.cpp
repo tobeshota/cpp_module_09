@@ -92,7 +92,7 @@ std::map<std::string, float> BitcoinExchange::storeValidBTCMarketValueChart(
   std::string line;
   while (getline(infile, line)) {
     try {
-      const std::string &date = getValidDate(line, delimiter);
+      const std::string &date = extractValidDate(line, delimiter);
       float exchangeRate = getValidExchangeRate(line, delimiter);
       map[date] = exchangeRate;
     } catch (const std::exception &e) {
@@ -118,8 +118,8 @@ BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &copy) {
 BitcoinExchange::~BitcoinExchange() { ; }
 
 // 文字列から有効な日付を取得し、無効な場合は例外を投げる
-const std::string BitcoinExchange::getValidDate(const std::string &line,
-                                                const std::string &delimiter) {
+const std::string BitcoinExchange::extractValidDate(
+    const std::string &line, const std::string &delimiter) {
   // lineからdate部分を抜き出す
   std::map<int, std::string> dateAndHoldings = splitString(line, delimiter);
   const std::map<int, std::string> date = splitString(dateAndHoldings[0], "-");
@@ -132,8 +132,8 @@ const std::string BitcoinExchange::getValidDate(const std::string &line,
 }
 
 // 文字列から有効な保有量を取得し、無効な場合は例外を投げる
-float BitcoinExchange::getValidHoldings(const std::string &line,
-                                        const std::string &delimiter) {
+float BitcoinExchange::extractValidHoldings(const std::string &line,
+                                            const std::string &delimiter) {
   // lineからholdings部分を抜き出す
   std::map<int, std::string> dateAndHoldings = splitString(line, delimiter);
   // holdingsが不正(float型に変換できない，値域が0-1000外である)のときにエラーが出せる
@@ -183,9 +183,9 @@ void BitcoinExchange::exchangeSafely(const char *BtcHoldingsChartPath) {
   while (std::getline(infile, line)) {
     try {
       // dateを取得する（値チェックを含む）
-      const std::string &date = getValidDate(line, INPUT_TXT_DELIMITER);
+      const std::string &date = extractValidDate(line, INPUT_TXT_DELIMITER);
       // quantityを取得する（値チェックを含む）
-      float holdings = getValidHoldings(line, INPUT_TXT_DELIMITER);
+      float holdings = extractValidHoldings(line, INPUT_TXT_DELIMITER);
       // 直近のBTCの交換レートを取得する
       float exchangeRate = getRecentlyExchangeRateSafely(date);
       printBtcValue(date, holdings, exchangeRate);

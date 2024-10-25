@@ -53,10 +53,10 @@ class BitcoinExchange {
                      float exchangeRate);
 
  protected:  //	メソッド単体をテストするため
-  static const std::string getValidDate(const std::string &line,
-                                        const std::string &delimiter);
-  static float getValidHoldings(const std::string &line,
-                                const std::string &delimiter);
+  static const std::string extractValidDate(const std::string &line,
+                                            const std::string &delimiter);
+  static float extractValidHoldings(const std::string &line,
+                                    const std::string &delimiter);
 
  public:
   float getRecentlyExchangeRateSafely(

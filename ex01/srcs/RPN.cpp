@@ -40,8 +40,8 @@ static int getOperatorSafely(const std::string& str) {
   for (size_t i = 0; i < sizeof(operation) / sizeof(operation[0]); i++) {
     if (str == operation[i]) return i;
   }
-  throw std::invalid_argument("Error: " + str + ": invalid argument");
-  return 0;
+  throw std::invalid_argument("Error: " + str + ": invalid token");
+  return -1;
 }
 
 void printResultSafely(const std::stack<int>& stack) {
@@ -50,19 +50,41 @@ void printResultSafely(const std::stack<int>& stack) {
   std::cout << stack.top() << std::endl;
 }
 
-void rpn(const std::string& input) {
+static bool isTokenDigit(const std::string& token) {
+  return (isAllDigits(token) && token.length() == 1);
+}
+
+static bool isTokenOperator(const std::string& token) {
+  return (token == "+" || token == "-" || token == "*" || token == "/");
+}
+
+static STATE getState(const std::string& token) {
+  if (isTokenDigit(token)) return DIGIT_STATE;
+  if (isTokenOperator(token)) return OPERATOR_STATE;
+  return INVALID_STATE;
+}
+
+void rpn(const std::string& istr) {
   try {
-    if (input.empty())
+    if (istr.empty())
       throw std::invalid_argument("Error: arguments are empty");
-    std::istringstream ss(input);
-    std::string elem;
+
+    std::istringstream iss(istr);
+    std::string token;
     std::stack<int> stack;
-    while (std::getline(ss, elem, ARGV_DELIMITER)) {
-      // 1桁の数字の場合，stackに安全に格納する
-      if (isAllDigits(elem) && elem.length() == 1)
-        stack.push(str2TSafely(elem, static_cast<int>(42)));
-      else  // 演算子の場合，安全に演算する
-        calaculateSafely(stack, getOperatorSafely(elem));
+    while (std::getline(iss, token, ARGV_DELIMITER)) {
+      STATE state = getState(token);
+      switch (state) {
+        case DIGIT_STATE:
+          stack.push(str2TSafely(token, static_cast<int>(42)));
+          break;
+        case OPERATOR_STATE:
+          calaculateSafely(stack, getOperatorSafely(token));
+          break;
+        case INVALID_STATE:
+        default:
+          throw std::invalid_argument("Error: " + token + ": invalid token");
+      }
     }
     printResultSafely(stack);
   } catch (const std::exception& e) {

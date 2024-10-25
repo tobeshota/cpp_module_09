@@ -18,9 +18,9 @@ TEST(KO, DivisionByZero) {
 
 // 無効な演算子
 TEST(KO, InvalidOperator) {
-  EXPECT_EQ(getRPNStderr("(1 + 1)"), "Error: (1: invalid argument\n");
-  EXPECT_EQ(getRPNStderr("4 5 %"), "Error: %: invalid argument\n");
-  EXPECT_EQ(getRPNStderr("2 2 3.14 * *"), "Error: 3.14: invalid argument\n");
+  EXPECT_EQ(getRPNStderr("(1 + 1)"), "Error: (1: invalid token\n");
+  EXPECT_EQ(getRPNStderr("4 5 %"), "Error: %: invalid token\n");
+  EXPECT_EQ(getRPNStderr("2 2 3.14 * *"), "Error: 3.14: invalid token\n");
 }
 
 // 入力が少なすぎる（演算子が足りない）
@@ -35,5 +35,5 @@ TEST(KO, TooFewInput) {
 
 // 数字が複数桁
 TEST(KO, MultiDigitNumber) {
-  EXPECT_EQ(getRPNStderr("12 3 +"), "Error: 12: invalid argument\n");
+  EXPECT_EQ(getRPNStderr("12 3 +"), "Error: 12: invalid token\n");
 }

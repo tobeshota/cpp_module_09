@@ -6,7 +6,8 @@
 
 #define ARGV_DELIMITER ' '
 
-enum OPERATION { ADD, SUB, MUL, DIV };
+typedef enum { ADD, SUB, MUL, DIV } OPERATION;
+typedef enum { DIGIT_STATE, OPERATOR_STATE, INVALID_STATE } STATE;
 
 void rpn(const std::string &input);
 

@@ -107,49 +107,49 @@ TEST_F(BTCTest, extractValidDateDateKOTest) {
                std::invalid_argument);
 }
 
-TEST_F(BTCTest, extractValidHoldingsOKTest) {
+TEST_F(BTCTest, extractValidPriceOKTest) {
   // ----- 基本的なテスト(0-1000以内の浮動小数点数または正の整数) -----
-  EXPECT_EQ(0, b->extractValidHoldings("2023-05-16 | 0", INPUT_TXT_DELIMITER));
+  EXPECT_EQ(0, b->extractValidPrice("2023-05-16 | 0", INPUT_TXT_DELIMITER));
   EXPECT_EQ(42,
-            b->extractValidHoldings("2023-05-16 | 42", INPUT_TXT_DELIMITER));
+            b->extractValidPrice("2023-05-16 | 42", INPUT_TXT_DELIMITER));
   EXPECT_EQ(
       static_cast<float>(42.195),
-      b->extractValidHoldings("2023-05-16 | 42.195", INPUT_TXT_DELIMITER));
+      b->extractValidPrice("2023-05-16 | 42.195", INPUT_TXT_DELIMITER));
   EXPECT_EQ(1000,
-            b->extractValidHoldings("2001-12-31 | 1000", INPUT_TXT_DELIMITER));
+            b->extractValidPrice("2001-12-31 | 1000", INPUT_TXT_DELIMITER));
 }
 
-TEST_F(BTCTest, extractValidHoldingsFormatKOTest) {
-  // ----- holdingsがない -----
-  EXPECT_THROW(b->extractValidHoldings("2023-05-16 | ", INPUT_TXT_DELIMITER),
+TEST_F(BTCTest, extractValidPriceFormatKOTest) {
+  // ----- Priceがない -----
+  EXPECT_THROW(b->extractValidPrice("2023-05-16 | ", INPUT_TXT_DELIMITER),
                std::invalid_argument);
-  EXPECT_THROW(b->extractValidHoldings("2023-05-16", INPUT_TXT_DELIMITER),
+  EXPECT_THROW(b->extractValidPrice("2023-05-16", INPUT_TXT_DELIMITER),
                std::invalid_argument);
-  EXPECT_THROW(b->extractValidHoldings(" | ", INPUT_TXT_DELIMITER),
+  EXPECT_THROW(b->extractValidPrice(" | ", INPUT_TXT_DELIMITER),
                std::invalid_argument);
-  EXPECT_THROW(b->extractValidHoldings("", INPUT_TXT_DELIMITER),
+  EXPECT_THROW(b->extractValidPrice("", INPUT_TXT_DELIMITER),
                std::invalid_argument);
 
-  // ----- holdingsがおかしい -----
+  // ----- Priceがおかしい -----
   EXPECT_THROW(
-      b->extractValidHoldings("2023-05-16 | holdings!!!", INPUT_TXT_DELIMITER),
+      b->extractValidPrice("2023-05-16 | Price!!!", INPUT_TXT_DELIMITER),
       std::invalid_argument);
   EXPECT_THROW(
-      b->extractValidHoldings("2023-05-16 | 3..14", INPUT_TXT_DELIMITER),
+      b->extractValidPrice("2023-05-16 | 3..14", INPUT_TXT_DELIMITER),
       std::invalid_argument);
 }
 
-TEST_F(BTCTest, extractValidHoldingsRangeKOTest) {
-  // ----- holdingsが0-1000の範囲外にある -----
-  EXPECT_THROW(b->extractValidHoldings("2023-05-16 | -1", INPUT_TXT_DELIMITER),
+TEST_F(BTCTest, extractValidPriceRangeKOTest) {
+  // ----- Priceが0-1000の範囲外にある -----
+  EXPECT_THROW(b->extractValidPrice("2023-05-16 | -1", INPUT_TXT_DELIMITER),
                std::invalid_argument);
   EXPECT_THROW(
-      b->extractValidHoldings("2023-05-16 | 1001", INPUT_TXT_DELIMITER),
+      b->extractValidPrice("2023-05-16 | 1001", INPUT_TXT_DELIMITER),
       std::invalid_argument);
   EXPECT_THROW(
-      b->extractValidHoldings("2023-05-16 | 2147483647", INPUT_TXT_DELIMITER),
+      b->extractValidPrice("2023-05-16 | 2147483647", INPUT_TXT_DELIMITER),
       std::invalid_argument);
   EXPECT_THROW(
-      b->extractValidHoldings("2023-05-16 | -2147483648", INPUT_TXT_DELIMITER),
+      b->extractValidPrice("2023-05-16 | -2147483648", INPUT_TXT_DELIMITER),
       std::invalid_argument);
 }

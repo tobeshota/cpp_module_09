@@ -2,5 +2,5 @@
 
 int main(void) {
   BitcoinExchange b = BitcoinExchange();
-  b.exchangeSafely(BTC_HOLDINGS_CHART);
+  b.exchangeSafely(BTC_Price_CHART);
 }

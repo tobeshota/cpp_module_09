@@ -73,8 +73,7 @@ void rpn(const std::string& istr) {
     std::string token;
     std::stack<int> stack;
     while (std::getline(iss, token, ARGV_DELIMITER)) {
-      STATE state = getState(token);
-      switch (state) {
+      switch (getState(token)) {
         case DIGIT_STATE:
           stack.push(str2TSafely(token, static_cast<int>(42)));
           break;

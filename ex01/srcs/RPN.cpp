@@ -66,8 +66,7 @@ static STATE getState(const std::string& token) {
 
 void rpn(const std::string& istr) {
   try {
-    if (istr.empty())
-      throw std::invalid_argument("Error: arguments are empty");
+    if (istr.empty()) throw std::invalid_argument("Error: arguments are empty");
 
     std::istringstream iss(istr);
     std::string token;
@@ -85,6 +84,7 @@ void rpn(const std::string& istr) {
           throw std::invalid_argument("Error: " + token + ": invalid token");
       }
     }
+
     printResultSafely(stack);
   } catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;

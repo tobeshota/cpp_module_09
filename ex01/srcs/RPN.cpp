@@ -58,7 +58,7 @@ static bool isTokenOperator(const std::string& token) {
   return (token == "+" || token == "-" || token == "*" || token == "/");
 }
 
-static STATE getState(const std::string& token) {
+static STATE getTokenState(const std::string& token) {
   if (isTokenDigit(token)) return DIGIT_STATE;
   if (isTokenOperator(token)) return OPERATOR_STATE;
   return INVALID_STATE;
@@ -72,7 +72,7 @@ void rpn(const std::string& istr) {
     std::string token;
     std::stack<int> stack;
     while (std::getline(iss, token, ARGV_DELIMITER)) {
-      switch (getState(token)) {
+      switch (getTokenState(token)) {
         case DIGIT_STATE:
           stack.push(str2TSafely(token, static_cast<int>(42)));
           break;

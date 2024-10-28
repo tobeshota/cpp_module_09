@@ -174,12 +174,15 @@ float BitcoinExchange::getRecentlyExchangeRateSafely(const std::string &date) {
 }
 
 void BitcoinExchange::exchangeSafely(const char *BtcPriceChartPath) {
+  // ファイルを開く
   std::ifstream infile(BtcPriceChartPath);
-  if (!infile)
-    throw std::invalid_argument(std::string(RED) + "infile couldn't open" +
-                                std::string(DEFAULT));
+  if (!infile) {
+    std::cerr << std::string(RED) + "infile couldn't open" +
+                     std::string(DEFAULT) + "\n";
+    return;
+  }
+
   std::string line;
-  // 各行ごとに見ていく
   while (std::getline(infile, line)) {
     try {
       // dateを取得する（値チェックを含む）

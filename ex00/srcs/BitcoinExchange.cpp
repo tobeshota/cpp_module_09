@@ -104,8 +104,8 @@ std::map<std::string, float> BitcoinExchange::storeValidBTCMarketValueChart(
 
 BitcoinExchange::BitcoinExchange() {
   // bitcoinの時価一覧表ファイルを読み込む
-  _m_BTCMarketValueChart =
-      storeValidBTCMarketValueChart(BTC_MARKET_EXCHANGE_RATE_PATH, CSV_DELIMITER);
+  _m_BTCMarketValueChart = storeValidBTCMarketValueChart(
+      BTC_MARKET_EXCHANGE_RATE_PATH, CSV_DELIMITER);
 }
 
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &copy) { *this = copy; }
@@ -133,7 +133,7 @@ const std::string BitcoinExchange::extractValidDate(
 
 // 文字列から有効な保有量を取得し、無効な場合は例外を投げる
 float BitcoinExchange::extractValidPrice(const std::string &line,
-                                            const std::string &delimiter) {
+                                         const std::string &delimiter) {
   // lineからPrice部分を抜き出す
   std::map<int, std::string> dateAndPrice = splitString(line, delimiter);
   // Priceが不正(float型に変換できない，値域が0-1000外である)のときにエラーが出せる

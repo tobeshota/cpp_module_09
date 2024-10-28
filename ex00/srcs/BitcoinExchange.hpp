@@ -6,11 +6,11 @@
 
 #ifdef TEST_BY_GTEST  // `make
                       // test`によるGoogleTest実行時のcwd"./test/build"から見たファイルパス
-#define BTC_MARKET_EXCHANGE_RATE_PATH "../../srcs/data.csv"
-#define BTC_Price_CHART "../../srcs/input.txt"
+#define BTC_MARKET_EXCHANGE_RATE_PATH "../../data.csv"
+#define BTC_Price_CHART "../../input.txt"
 #else  //	`make`により生成した実行ファイル実行時のcwd"./"からみたファイルパス
-#define BTC_MARKET_EXCHANGE_RATE_PATH "./srcs/data.csv"
-#define BTC_Price_CHART "./srcs/input.txt"
+#define BTC_MARKET_EXCHANGE_RATE_PATH "./data.csv"
+#define BTC_Price_CHART "./input.txt"
 #endif
 
 #define CSV_DELIMITER ","
@@ -49,14 +49,13 @@ class BitcoinExchange {
   std::map<std::string, float> _m_BTCMarketValueChart;
   std::map<std::string, float> storeValidBTCMarketValueChart(
       const char *filePath, const std::string &delimiter);
-  void printBtcValue(const std::string &date, float Price,
-                     float exchangeRate);
+  void printBtcValue(const std::string &date, float Price, float exchangeRate);
 
  protected:  //	メソッド単体をテストするため
   static const std::string extractValidDate(const std::string &line,
                                             const std::string &delimiter);
   static float extractValidPrice(const std::string &line,
-                                    const std::string &delimiter);
+                                 const std::string &delimiter);
 
  public:
   float getRecentlyExchangeRateSafely(

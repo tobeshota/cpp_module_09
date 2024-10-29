@@ -69,11 +69,11 @@ class BitcoinExchange {
 };
 
 // 文字列を指定された型に安全に変換する。変換が失敗した場合は例外を投げる。
-template <typename T>
-static T str2TSafely(const std::string &s, T type) {
+template <typename Container>
+static Container str2TSafely(const std::string &s, Container type) {
   (void)type;  // 型推論のために使わない引数
   std::stringstream ss(s);
-  T value;
+  Container value;
   ss >> value;
   // 変換が失敗した場合、または残った文字列がある場合は例外を投げる
   if (ss.fail() || !ss.eof()) throw std::invalid_argument(CONVERT_ERRMSG(s));

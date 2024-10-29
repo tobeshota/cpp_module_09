@@ -2,8 +2,8 @@
 
 TEST_F(BTCTest, extractValidDateOKTest) {
   // ----- 基本的なテスト -----
-  EXPECT_EQ("2001-01-1",
-            b->extractValidDate("2001-01-1 | 3", INPUT_TXT_DELIMITER));
+  EXPECT_EQ("2001-01-01",
+            b->extractValidDate("2001-01-01 | 3", INPUT_TXT_DELIMITER));
   EXPECT_EQ("2023-05-16",
             b->extractValidDate("2023-05-16 | 3", INPUT_TXT_DELIMITER));
   EXPECT_EQ("2001-12-31",
@@ -71,6 +71,9 @@ TEST_F(BTCTest, extractValidDateDateKOTest) {
                std::invalid_argument);
   EXPECT_THROW(b->extractValidDate("2023-13-16 | 3", INPUT_TXT_DELIMITER),
                std::invalid_argument);
+  // 2桁でない
+  EXPECT_THROW(b->extractValidDate("2023-5-16 | 3", INPUT_TXT_DELIMITER),
+               std::invalid_argument);
 
   // ----- 日がおかしい -----
   // 日が0-9で構成されていない
@@ -104,6 +107,9 @@ TEST_F(BTCTest, extractValidDateDateKOTest) {
   EXPECT_THROW(b->extractValidDate("2023-11-31 | 3", INPUT_TXT_DELIMITER),
                std::invalid_argument);
   EXPECT_THROW(b->extractValidDate("2023-12-32 | 3", INPUT_TXT_DELIMITER),
+               std::invalid_argument);
+  // 2桁でない
+  EXPECT_THROW(b->extractValidDate("2023-05-6 | 3", INPUT_TXT_DELIMITER),
                std::invalid_argument);
 }
 

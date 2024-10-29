@@ -36,6 +36,8 @@ bool isNumWithinRange(int num, int min, int max) {
 bool isYearValid(const std::string &year) { return isAllDigits(year); }
 
 bool isMonthValid(const std::string &month) {
+  if (month.size() != 2) return false;
+
   try {
     bool isLengthValid = isNumWithinRange(month.length(), 1, 2);
     bool between1And12 =
@@ -56,6 +58,8 @@ bool isLeapYear(const std::string &year) {
 }
 
 bool isDayValid(std::map<int, std::string> date) {
+  if (date[2].size() != 2) return false;
+
   int daysOfMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
   if (isLeapYear(date.at(0)) == true) daysOfMonth[1]++;
   try {

@@ -33,6 +33,16 @@ TEST(KO, TooFewInput) {
   EXPECT_EQ(getRPNStderr(""), "Error: arguments are empty\n");
 }
 
+// 空白
+TEST(KO, Empty1) {
+  EXPECT_EQ(getRPNStderr(""), "Error: arguments are empty\n");
+}
+
+// 空白
+TEST(KO, Empty2) {
+  EXPECT_EQ(getRPNStderr(""), "Error: arguments are empty\n");
+}
+
 // 数字が複数桁
 TEST(KO, MultiDigitNumber) {
   EXPECT_EQ(getRPNStderr("12 3 +"), "Error: 12: invalid token\n");

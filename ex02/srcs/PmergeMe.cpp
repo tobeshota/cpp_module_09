@@ -1,7 +1,9 @@
 #include "PmergeMe.hpp"
 
-// void mergeInsertSort(std::vector<int> vec) {
-// 	;
+// void mergeInsertionSort(std::vector<int> vec) {
+// 	// 分割パート
+//   // 統治パート
+//   ;
 // }
 
 void pmergeMe(char** argv) {
@@ -18,8 +20,8 @@ void pmergeMe(char** argv) {
 #endif
 
     // マージ挿入ソートする
-    // mergeInsertSort(vec);
-    // mergeInsertSort(deq);
+    // mergeInsertionSort(vec);
+    // mergeInsertionSort(deq);
     // 結果を出力する
   } catch (const std::exception& e) {
     std::cerr << e.what() << '\n';

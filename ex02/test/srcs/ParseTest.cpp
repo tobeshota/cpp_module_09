@@ -5,13 +5,6 @@
 class ParseOK : public ::testing::Test {};
 class ParseKO : public ::testing::Test {};
 
-// template<typename Container>
-// void storeValueSafely_EXPECT_EQ(Container expect, char **srcs, void
-// (Container::*insertMethod)(const int &)) {
-//   std::deque<int> actual = storeValueSafely(srcs, insertMethod);
-//   EXPECT_EQ(expect, actual);
-// }
-
 TEST_F(ParseOK, StoreWithVector) {
   const char* srcs[] = {"./PmergeMe", "10", "20", "30", nullptr};
   std::vector<int> actual =

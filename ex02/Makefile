@@ -6,7 +6,7 @@
 #    By: tobeshota <tobeshota@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/12 09:34:52 by tobeshota         #+#    #+#              #
-#    Updated: 2024/10/21 16:41:19 by tobeshota        ###   ########.fr        #
+#    Updated: 2024/11/04 15:02:22 by tobeshota        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ SHS				=	$(wildcard *.sh)
 OBJS			=	$(patsubst %.cpp, $(OBJS_DIR)%.o, $(SRCS))
 
 ifeq ($(MAKECMDGOALS), debug)
-	FLAGS += -DDEBUG
+	FLAGS += -g -DDEBUG
 endif
 
 ifeq ($(MAKECMDGOALS), address)

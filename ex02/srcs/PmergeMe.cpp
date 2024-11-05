@@ -30,13 +30,13 @@ static void printResult(const std::vector<int> &unsorted, const std::vector<int>
  *
  * @see README.md
  */
-static void mergeInsertionSort(std::vector<int> &seq) {
+std::vector<int> mergeInsertionSort(std::vector<int> &seq) {
   std::vector<int> small, large;                                   //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
   std::vector<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
   REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();    //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
   if (seq.size() < 2)
-    return ;
+    return seq;
   mkpair(seq, smallAndLargePairs);
   storeLarge(smallAndLargePairs, large);
   mergeInsertionSort(large);
@@ -46,6 +46,7 @@ static void mergeInsertionSort(std::vector<int> &seq) {
     small.push_back(remain);
   insertSmallIntoLargeInOrderOfJacobsthal(large, small);
   seq = large;
+  return seq;
 }
 
 /** マージ挿入ソート
@@ -55,7 +56,7 @@ static void mergeInsertionSort(std::vector<int> &seq) {
  *
  * @see README.md
  */
-static void mergeInsertionSort(std::deque<int> &seq) {
+std::deque<int> mergeInsertionSort(std::deque<int> &seq) {
   std::deque<int> small, large;                                   //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
   std::deque<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
   REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();   //  入力数列が奇数の時に格納する入力数列の末尾の要素
@@ -63,7 +64,7 @@ static void mergeInsertionSort(std::deque<int> &seq) {
   /* マージソートを行う */
   // 入力数列の要素数が1となるまで再起的に分割処理を行う
   if (seq.size() < 2)
-    return ;
+    return seq;
   // 入力数列(初回は`seq`，2回目以降は`large`)に対して，隣同士でペアを作る
   mkpair(seq, smallAndLargePairs);
   // ペアのうち，大きい方の要素を数列`large`に格納する
@@ -79,6 +80,7 @@ static void mergeInsertionSort(std::deque<int> &seq) {
   // 挿入する`small`の要素の順序をJacobsthal数で決める
   insertSmallIntoLargeInOrderOfJacobsthal(large, small);
   seq = large;
+  return seq;
 }
 
 void pmergeMe(char** argv) {
@@ -89,8 +91,8 @@ void pmergeMe(char** argv) {
     std::vector<int> unsorted(vec);  // 出力用
 
     // 引数をマージ挿入ソートによって昇順にソートする
-    double timeToSortVec = measureExecutionTime<void(*)(std::vector<int>&)>(mergeInsertionSort, vec);
-    double timeToSortDeq = measureExecutionTime<void(*)(std::deque<int>&)>(mergeInsertionSort, deq);
+    double timeToSortVec = measureExecutionTime<std::vector<int>(*)(std::vector<int>&)>(mergeInsertionSort, vec);
+    double timeToSortDeq = measureExecutionTime<std::deque<int>(*)(std::deque<int>&)>(mergeInsertionSort, deq);
 
     // 結果を出力する
     printResult(unsorted, vec, timeToSortVec, timeToSortDeq);

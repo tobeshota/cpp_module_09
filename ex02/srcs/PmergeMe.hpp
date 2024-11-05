@@ -9,6 +9,9 @@
 #include <ctime>   //  std::clock, std::CLOCKS_PER_SEC
 
 size_t jacobsthal(size_t n);
+std::vector<int> mergeInsertionSort(std::vector<int> &seq);
+std::deque<int> mergeInsertionSort(std::deque<int> &seq);
+
 void pmergeMe(char **argv);
 
 // ---------- template function ---------- //
@@ -84,13 +87,13 @@ void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small)
   }
 }
 
-/** 関数(引数は1つ，返り値の型はvoid)の実行時間を計測する
+/** 関数(引数の数は1つ)の実行時間を計測する
  *
  * @example 呼び出しの例
- * - 例として void mergeInsertionSort(std::vector<int> &seq); 関数の実行時間を計測するときには，次のように呼び出す．
- *   ```double timeToSortVec = measureExecutionTime<void(*)(std::vector<int>&)>(mergeInsertionSort, vec);```
- * - 記法 <void(*)(std::vector<int>&)> が意味するのは次の通りである．
- *   - void:              mergeInsertionSort関数の返り値の型
+ * - 例として std::vector mergeInsertionSort(std::vector<int> &seq); 関数の実行時間を計測するときには，次のように呼び出す．
+ *   ```double timeToSortVec = measureExecutionTime<std::vector<int>(*)(std::vector<int>&)>(mergeInsertionSort, vec);```
+ * - 記法 <std::vector<int>(*)(std::vector<int>&)> が意味するのは次の通りである．
+ *   - std::vector<int>:  mergeInsertionSort関数の返り値の型
  *   - (*)(...):          *は関数ポインタ，よって(*)(...)は「ポインタであるmergeInsertionSort関数」
  *   - std::vector<int>&: mergeInsertionSort関数の引数の型
  *

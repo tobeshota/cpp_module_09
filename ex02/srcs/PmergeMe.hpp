@@ -1,12 +1,10 @@
 #pragma once
 
-#include <algorithm>
-#include <vector>
-#include <deque>
-#include <fstream>
 #include <iostream>
 #include <sstream>  //  std::stringstream
 #include <ctime>   //  std::clock, std::CLOCKS_PER_SEC
+#include <vector>
+#include <deque>
 
 #define MAX_NUM_OF_PRINT_ELEM 10  //  標準出力する数列の要素の最大数
 

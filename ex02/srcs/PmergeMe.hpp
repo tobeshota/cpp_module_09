@@ -145,7 +145,7 @@ void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small)
  *
  * @example 呼び出しの例
  * - 例として std::vector mergeInsertionSort(std::vector<int> &seq); 関数の実行時間を計測するときには，次のように呼び出す．
- *   ```double timeToSortVec = measureExecutionTime<std::vector<int>(*)(std::vector<int>&)>(mergeInsertionSort, vec);```
+ *   `double timeToSortVec = measureExecutionTime<std::vector<int>(*)(std::vector<int>&)>(mergeInsertionSort, vec);`
  * - 記法 <std::vector<int>(*)(std::vector<int>&)> が意味するのは次の通りである．
  *   - std::vector<int>:  mergeInsertionSort関数の返り値の型
  *   - (*)(...):          *は関数ポインタ，よって(*)(...)は「ポインタであるmergeInsertionSort関数」

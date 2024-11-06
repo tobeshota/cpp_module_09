@@ -8,10 +8,10 @@
 
 #define MAX_NUM_OF_PRINT_ELEM 10  //  標準出力する数列の要素の最大数
 
-void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq);
+// ---------- prototype declaration ---------- //
+
 std::vector<int> mergeInsertionSort(std::vector<int> &seq);
 std::deque<int> mergeInsertionSort(std::deque<int> &seq);
-
 void pmergeMe(char **argv);
 
 // ---------- template function ---------- //
@@ -51,11 +51,8 @@ Container storeValueSafely(const char **srcs,
   Container dest;
   // int i = 1である理由は，srcs[1]=="./PmergeMe"のため
   for (int i = 1; srcs[i]; i++) {
-    // char*をint型に安全に変換する
     int num = str2TSafely(std::string(srcs[i]), static_cast<int>(42));
-    // 変換した値が負の数なら例外を投げる
     if (num < 0) throw std::invalid_argument("Error");
-    // 値をコンテナに代入する
     (dest.*insertMethod)(num);
   }
   return dest;
@@ -132,11 +129,14 @@ void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small)
   const Container& jacobsthalSeq = generateJacobsthalSeq<Container>(small.size());
 
   for (size_t n = 0; small.size(); n++) {
+
     // 挿入する`small`の要素の順序をJacobsthal数で決める
     typename Container::iterator insertElem = small.begin() + min<size_t>(jacobsthalSeq[n], small.size() - 1);
+
     // 挿入する`small`の要素の位置をstd::lower_boundによって二分探索する
     typename Container::iterator insertPos = std::lower_bound(large.begin(), large.end(), *insertElem);
     // typename Container::iterator insertPos = binarySearch(large, *insertElem);
+
     large.insert(insertPos, *insertElem);
     small.erase(insertElem);
   }
@@ -165,7 +165,7 @@ double measureExecutionTime(Func func, Arg &arg) {
 
 // 入力数列に対して，隣同士でペアを作る
 template<typename Container, typename ContainerWithPairAsElemType>
-void mkpair(const Container& input, ContainerWithPairAsElemType& pairs) {
+void makePair(const Container& input, ContainerWithPairAsElemType& pairs) {
   for (size_t i = 0; i + 1 < input.size(); i+=2) {
     if (input[i] < input[i+1])
       pairs.push_back(std::make_pair(input[i], input[i+1]));
@@ -193,4 +193,3 @@ void storeSmallInOrderOfLarge(Container& small, const Container& large, const Co
     }
   }
 }
-

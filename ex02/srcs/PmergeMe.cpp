@@ -4,7 +4,7 @@ typedef int REMAIN;
 #define NOTHING (REMAIN)-1
 
 // 結果を出力する
-void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq) {
+static void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq) {
   std::cout << "Before: ";
   printContainerElem(unsorted, MAX_NUM_OF_PRINT_ELEM);
   std::cout << "After:  ";
@@ -24,11 +24,11 @@ std::vector<int> mergeInsertionSort(std::vector<int> &seq) {
   if (seq.size() < 2)
     return seq;
 
-  std::vector<int> small, large;                                   //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
-  std::vector<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
+  std::vector<int> small, large;                                         //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
+  std::vector<std::pair<int, int> > smallAndLargePairs;                  //  `large `の各要素と`small`の各要素の1対1のペア
   const REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();    //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
-  mkpair(seq, smallAndLargePairs);
+  makePair(seq, smallAndLargePairs);
   storeLarge(smallAndLargePairs, large);
   mergeInsertionSort(large);
 
@@ -37,6 +37,7 @@ std::vector<int> mergeInsertionSort(std::vector<int> &seq) {
     small.push_back(remain);
   insertSmallIntoLargeInOrderOfJacobsthal(large, small);
   seq = large;
+
   return seq;
 }
 
@@ -53,12 +54,12 @@ std::deque<int> mergeInsertionSort(std::deque<int> &seq) {
   if (seq.size() < 2)
     return seq;
 
-  std::deque<int> small, large;                                   //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
-  std::deque<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
+  std::deque<int> small, large;                                         //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
+  std::deque<std::pair<int, int> > smallAndLargePairs;                  //  `large `の各要素と`small`の各要素の1対1のペア
   const REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();   //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
   // 入力数列(初回は`seq`，2回目以降は`large`)に対して，隣同士でペアを作る
-  mkpair(seq, smallAndLargePairs);
+  makePair(seq, smallAndLargePairs);
   // ペアのうち，大きい方の要素を数列`large`に格納する
   storeLarge(smallAndLargePairs, large);
   // `large`を入力数列として，要素数が1となるまで上記処理を再起的に実行する(これによって`large`がソートされる．言い換えれば，`seq`が大きい方の値でソートされる)
@@ -69,15 +70,16 @@ std::deque<int> mergeInsertionSort(std::deque<int> &seq) {
   storeSmallInOrderOfLarge(small, large, smallAndLargePairs);
   if (remain != NOTHING)
     small.push_back(remain);
-  // 挿入する`small`の要素の順序をJacobsthal数で決める
+  // `small`の各要素をJacobsthal数順に`large`に昇順に挿入する
   insertSmallIntoLargeInOrderOfJacobsthal(large, small);
   seq = large;
+
   return seq;
 }
 
 void pmergeMe(char** argv) {
   try {
-    // 引数をSTLに安全に代入する
+    // 引数をSTLコンテナに安全に代入する
     std::deque<int> deq = storeValueSafely(argv, &std::deque<int>::push_back);
     std::vector<int> vec = storeValueSafely(argv, &std::vector<int>::push_back);
     std::vector<int> unsorted(vec);  // 出力用

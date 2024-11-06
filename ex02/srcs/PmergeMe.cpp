@@ -11,14 +11,14 @@ size_t jacobsthal(size_t n) {
 }
 
 // 結果を出力する
-static void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq) {
+void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq) {
   (void)vec;
   (void)timeToSortVec;
   (void)timeToSortDeq;
   std::cout << "Before: ";
-  printContainer(unsorted);
+  printContainerElem(unsorted, MAX_NUM_OF_PRINT_ELEM);
   std::cout << "After:  ";
-  printContainer(vec);
+  printContainerElem(vec, MAX_NUM_OF_PRINT_ELEM);
   std::cout << "Time to proccess a range of " << unsorted.size() << " elements with std::vector : " << timeToSortVec << " us" << std::endl;
   std::cout << "Time to proccess a range of " << unsorted.size() << " elements with std::deque  : " << timeToSortDeq << " us" << std::endl;
 }

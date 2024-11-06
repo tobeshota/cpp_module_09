@@ -8,7 +8,10 @@
 #include <sstream>  //  std::stringstream
 #include <ctime>   //  std::clock, std::CLOCKS_PER_SEC
 
+#define MAX_NUM_OF_PRINT_ELEM 10  //  標準出力する数列の要素の最大数
+
 size_t jacobsthal(size_t n);
+void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq);
 std::vector<int> mergeInsertionSort(std::vector<int> &seq);
 std::deque<int> mergeInsertionSort(std::deque<int> &seq);
 
@@ -62,11 +65,12 @@ Container storeValueSafely(const char **srcs,
 }
 
 template <typename Container>
-void printContainer(Container stl) {
+void printContainerElem(Container stl, const int maxNumOfPrintElem) {
   typename Container::iterator it = stl.begin();
-  for (; it != stl.end() - 1; it++)
+  const std::string ellipsis = (stl.size() > static_cast<size_t>(maxNumOfPrintElem) ? "... " : "");
+  for (; it != stl.end() && it - stl.begin() < maxNumOfPrintElem; it++)
     std::cout << *it << " ";
-  std::cout << *it << std::endl;
+  std::cout << ellipsis << std::endl;
 }
 
 template <typename T>

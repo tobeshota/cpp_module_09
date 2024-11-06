@@ -102,6 +102,21 @@ typename Container::iterator binarySearch(Container& large, int value) {
   return it + ok;
 }
 
+/** Jacobsthal数列を生成する
+ * @brief 指定された要素数でJacobsthal数列を生成する
+ *
+ * Jacobsthal数列は次の漸化式である．
+ *   J(n) = 0 (if n = 0)
+ *   J(n) = 1 (if n = 1)
+ *   J(n) = 2 * J(n - 2) + J(n - 1) (if n > 1)
+ * Jacobsthal数列の最初の数値は以下の通りである: 0, 1, 1, 3, 5, 11, 21, ...
+ *
+ * @tparam Container 生成されたJacobsthal数列を保持するコンテナ
+ * @param numOfElem 生成する数列の要素数
+ * @return Container 生成されたJacobsthal数列を含むコンテナ
+ *
+ * @note `numOfElem` が 2 未満の場合、最初の2つの要素 (0 と 1) が返される
+ */
 template<typename Container>
 Container generateJacobsthalSeq(size_t numOfElem) {
   Container jacobsthalSeq;

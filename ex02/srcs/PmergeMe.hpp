@@ -74,8 +74,8 @@ const T& min(const T& x, const T& y) {
 
 // 質問: first(!=last) >= valueか (value以上の数のうち，最小のものを求めたい)
 template<class Iterator>
-bool question(Iterator it, Iterator last, int value) {
-  return *it != *last && *it >= value;
+bool question(Iterator it, int value) {
+  return *it >= value;
 }
 
 /** 二分探索する
@@ -89,7 +89,7 @@ typename Container::iterator binarySearch(Container& large, int value) {
 
   while (ok - ko > 1) {
     int m = (ok + ko) / 2;
-    if (question(it + m, large.end(), value))
+    if (question(it + m, value))
       ok = m;
     else
       ko = m;
@@ -134,8 +134,7 @@ void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small)
     typename Container::iterator insertElem = small.begin() + min<size_t>(jacobsthalSeq[n], small.size() - 1);
 
     // 挿入する`small`の要素の位置をstd::lower_boundによって二分探索する
-    typename Container::iterator insertPos = std::lower_bound(large.begin(), large.end(), *insertElem);
-    // typename Container::iterator insertPos = binarySearch(large, *insertElem);
+    typename Container::iterator insertPos = binarySearch(large, *insertElem);
 
     large.insert(insertPos, *insertElem);
     small.erase(insertElem);

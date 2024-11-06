@@ -3,13 +3,6 @@
 typedef int REMAIN;
 #define NOTHING (REMAIN)-1
 
-// ヤコブスタール数列の n 番目の値を返す(0, 1, 1, 3, 5, 11, 21, ..)
-size_t jacobsthal(size_t n) {
-  if (n == 0) return 0;
-  if (n == 1) return 1;
-  return jacobsthal(n - 1) + (2 * jacobsthal(n - 2));
-}
-
 // 結果を出力する
 void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq) {
   std::cout << "Before: ";

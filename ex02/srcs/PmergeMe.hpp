@@ -10,7 +10,6 @@
 
 #define MAX_NUM_OF_PRINT_ELEM 10  //  標準出力する数列の要素の最大数
 
-size_t jacobsthal(size_t n);
 void printResult(const std::vector<int> &unsorted, const std::vector<int> &vec, double timeToSortVec, double timeToSortDeq);
 std::vector<int> mergeInsertionSort(std::vector<int> &seq);
 std::deque<int> mergeInsertionSort(std::deque<int> &seq);
@@ -106,8 +105,11 @@ typename Container::iterator binarySearch(Container& large, int value) {
 template<typename Container>
 Container generateJacobsthalSeq(size_t numOfElem) {
   Container jacobSeq;
-  for (size_t n = 0; n < numOfElem; n++)
-    jacobSeq.push_back(jacobsthal(n));
+
+  jacobSeq.push_back(0);
+  jacobSeq.push_back(1);
+  for (size_t n = 2; n < numOfElem; n++)
+    jacobSeq.push_back((2 * jacobSeq[n - 2]) + jacobSeq[n - 1]);
   return jacobSeq;
 }
 

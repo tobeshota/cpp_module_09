@@ -26,7 +26,7 @@ std::vector<int> mergeInsertionSort(std::vector<int> &seq) {
 
   std::vector<int> small, large;                                   //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
   std::vector<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
-  REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();    //  入力数列が奇数の時に格納する入力数列の末尾の要素
+  const REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();    //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
   mkpair(seq, smallAndLargePairs);
   storeLarge(smallAndLargePairs, large);
@@ -55,7 +55,7 @@ std::deque<int> mergeInsertionSort(std::deque<int> &seq) {
 
   std::deque<int> small, large;                                   //  入力数列を再起的に分割した2組のペアのうち，小さい/大きい方の要素数列
   std::deque<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
-  REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();   //  入力数列が奇数の時に格納する入力数列の末尾の要素
+  const REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();   //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
   // 入力数列(初回は`seq`，2回目以降は`large`)に対して，隣同士でペアを作る
   mkpair(seq, smallAndLargePairs);

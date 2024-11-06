@@ -60,8 +60,7 @@
 - KDonald E. Knut(2015). "The Art of Computer Programming Volume 3 Sorting and Searching Second Edition 日本語版". 達人出版会
 - PunkChameleon(2020). "ford-johnson-merge-insertion-sort: An implementation of the Ford-Johnson Merge-Insertion Sort Algorithm in Python", GitHub. <https://github.com/PunkChameleon/ford-johnson-merge-insertion-sort>. 2024年11月1日閲覧
 - jizots(2024). "【C++】Merge-insertion sort. Ford-Johnson algorithm ##merge_insertion_sort", Qiita. <https://qiita.com/jizots/items/0d484a173c1921d2083e>. 2024年11月1日閲覧
-
-
+- Pro_ktmr(2020). "図解】二分探索はもう間違えない！スリーステップ実装法＆記憶に残るアニメーション #C++", Qiita. <https://qiita.com/Pro_ktmr/items/8946723fe08ba29a977c>. 2024年11月6日閲覧
 
 [^1]: 二分挿入ソート(別称: バイナリインサートソート)とは，挿入ソートの一種である．挿入ソートとは，ソート済みの数列に，新たな要素を適当な位置に挿入するソートアルゴリズムである．二分挿入ソートとは，ソート時の比較回数(挿入位置の探索回数)を抑えることを目的として，挿入位置を二分探索によって求める挿入ソートアルゴリズムである．これは，挿入される数列がソート済みであるという性質を利用している．
 

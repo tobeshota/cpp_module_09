@@ -74,6 +74,31 @@ const T& min(const T& x, const T& y) {
   return x <= y ? x : y;
 }
 
+// 質問: first(!=last) >= valueか (value以上の数のうち，最小のものを求めたい)
+template<class Iterator>
+bool question(Iterator it, Iterator last, int value) {
+  return *it != *last && *it >= value;
+}
+
+/** 二分探索する
+ * @brief 「めぐる式二分探索」を参考にvalueのlargeへの挿入位置を二分探索する
+ * @ref https://qiita.com/Pro_ktmr/items/8946723fe08ba29a977c
+ */
+template<class Container>
+typename Container::iterator binarySearch(Container& large, int value) {
+  typename Container::iterator it = large.begin();
+  int ok = large.size(), ko = -1;
+
+  while (ok - ko > 1) {
+    int m = (ok + ko) / 2;
+    if (question(it + m, large.end(), value))
+      ok = m;
+    else
+      ko = m;
+  }
+  return it + ok;
+}
+
 // `small`の各要素をJacobsthal数順に`large`に昇順に挿入する
 template<typename Container>
 void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small) {
@@ -81,7 +106,7 @@ void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small)
     // 挿入する`small`の要素の順序をJacobsthal数で決める
     typename Container::iterator insertElem = small.begin() + min(jacobsthal(n), small.size() - 1);
     // 挿入する`small`の要素の位置をstd::lower_boundによって二分探索する
-    typename Container::iterator insertPos = std::lower_bound(large.begin(), large.end(), *insertElem);
+    typename Container::iterator insertPos = binarySearch(large, *insertElem);
     large.insert(insertPos, *insertElem);
     small.erase(insertElem);
   }

@@ -28,7 +28,8 @@ std::vector<int> mergeInsertionSort(std::vector<int> &seq) {
   std::vector<std::pair<int, int> > smallAndLargePairs;            //  `large `の各要素と`small`の各要素の1対1のペア
   REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();    //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
-  mkpairAndStoreLarge(seq, smallAndLargePairs, large);
+  mkpair(seq, smallAndLargePairs);
+  storeLarge(smallAndLargePairs, large);
   mergeInsertionSort(large);
 
   storeSmallInOrderOfLarge(small, large, smallAndLargePairs);
@@ -57,8 +58,9 @@ std::deque<int> mergeInsertionSort(std::deque<int> &seq) {
   REMAIN remain = (seq.size() % 2 == 0) ? NOTHING : seq.back();   //  入力数列が奇数の時に格納する入力数列の末尾の要素
 
   // 入力数列(初回は`seq`，2回目以降は`large`)に対して，隣同士でペアを作る
+  mkpair(seq, smallAndLargePairs);
   // ペアのうち，大きい方の要素を数列`large`に格納する
-  mkpairAndStoreLarge(seq, smallAndLargePairs, large);
+  storeLarge(smallAndLargePairs, large);
   // `large`を入力数列として，要素数が1となるまで上記処理を再起的に実行する(これによって`large`がソートされる．言い換えれば，`seq`が大きい方の値でソートされる)
   mergeInsertionSort(large);
 

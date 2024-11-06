@@ -24,6 +24,10 @@ TEST(SortableTest, UniqueElem) {
 	validateSortable(std::vector<int>{3, 5, 9, 7, 4});
 }
 
-TEST(SortableTest, alreadySorted) {
+TEST(SortableTest, DuplicateElem) {
+	validateSortable(std::vector<int>{5, 5, 5});
+}
+
+TEST(SortableTest, AlreadySorted) {
 	validateSortable(std::vector<int>{2, 4, 6});
 }

@@ -103,14 +103,25 @@ typename Container::iterator binarySearch(Container& large, int value) {
   return it + ok;
 }
 
+template<typename Container>
+Container generateJacobsthalSeq(size_t numOfElem) {
+  Container jacobSeq;
+  for (size_t n = 0; n < numOfElem; n++)
+    jacobSeq.push_back(jacobsthal(n));
+  return jacobSeq;
+}
+
 // `small`の各要素をJacobsthal数順に`large`に昇順に挿入する
 template<typename Container>
 void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small) {
+  const Container& jacobSeq = generateJacobsthalSeq<Container>(small.size());
+
   for (size_t n = 0; small.size(); n++) {
     // 挿入する`small`の要素の順序をJacobsthal数で決める
-    typename Container::iterator insertElem = small.begin() + min(jacobsthal(n), small.size() - 1);
+    typename Container::iterator insertElem = small.begin() + min<size_t>(jacobSeq[n], small.size() - 1);
     // 挿入する`small`の要素の位置をstd::lower_boundによって二分探索する
-    typename Container::iterator insertPos = binarySearch(large, *insertElem);
+    typename Container::iterator insertPos = std::lower_bound(large.begin(), large.end(), *insertElem);
+    // typename Container::iterator insertPos = binarySearch(large, *insertElem);
     large.insert(insertPos, *insertElem);
     small.erase(insertElem);
   }
@@ -139,20 +150,16 @@ double measureExecutionTime(Func func, Arg &arg) {
 
 // 入力数列に対して，隣同士でペアを作る
 template<typename Container, typename ContainerWithPairAsElemType>
-void mkpair(const Container& input, ContainerWithPairAsElemType& pairs) {
+void mkpairAndStoreLarge(const Container& input, ContainerWithPairAsElemType& pairs, Container &large) {
   for (size_t i = 0; i + 1 < input.size(); i+=2) {
-    if (input[i] < input[i+1])
+    if (input[i] < input[i+1]) {
       pairs.push_back(std::make_pair(input[i], input[i+1]));
-    else
+      large.push_back(input[i+1]);
+    } else {
       pairs.push_back(std::make_pair(input[i+1], input[i]));
+      large.push_back(input[i]);
+    }
   }
-}
-
-// ペアのうち，大きい方の要素を数列`large`に格納する
-template<typename Container, typename ContainerWithPairAsElemType>
-void storeLarge(const ContainerWithPairAsElemType& ascendingPairs, Container& large) {
-  for (size_t i = 0; i < ascendingPairs.size(); i++)
-    large.push_back(ascendingPairs[i].second);
 }
 
 // `small`をソート済みの`large`の順序で格納する
@@ -167,3 +174,4 @@ void storeSmallInOrderOfLarge(Container& small, const Container& large, const Co
     }
   }
 }
+

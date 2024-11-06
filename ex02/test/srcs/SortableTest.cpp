@@ -31,3 +31,11 @@ TEST(SortableTest, DuplicateElem) {
 TEST(SortableTest, AlreadySorted) {
 	validateSortable(std::vector<int>{2, 4, 6});
 }
+
+TEST(SortableTest, Empty) {
+	validateSortable(std::vector<int>{});
+}
+
+TEST(SortableTest, Only1) {
+	validateSortable(std::vector<int>{42});
+}

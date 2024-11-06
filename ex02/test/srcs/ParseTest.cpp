@@ -5,6 +5,8 @@
 class ParseOK : public ::testing::Test {};
 class ParseKO : public ::testing::Test {};
 
+// ---------- test macro ---------- //
+
 TEST_F(ParseOK, StoreWithVector) {
   const char* srcs[] = {"./PmergeMe", "10", "20", "30", nullptr};
   std::vector<int> actual =

@@ -104,23 +104,23 @@ typename Container::iterator binarySearch(Container& large, int value) {
 
 template<typename Container>
 Container generateJacobsthalSeq(size_t numOfElem) {
-  Container jacobSeq;
+  Container jacobsthalSeq;
 
-  jacobSeq.push_back(0);
-  jacobSeq.push_back(1);
+  jacobsthalSeq.push_back(0);
+  jacobsthalSeq.push_back(1);
   for (size_t n = 2; n < numOfElem; n++)
-    jacobSeq.push_back((2 * jacobSeq[n - 2]) + jacobSeq[n - 1]);
-  return jacobSeq;
+    jacobsthalSeq.push_back((2 * jacobsthalSeq[n - 2]) + jacobsthalSeq[n - 1]);
+  return jacobsthalSeq;
 }
 
 // `small`の各要素をJacobsthal数順に`large`に昇順に挿入する
 template<typename Container>
 void insertSmallIntoLargeInOrderOfJacobsthal(Container& large, Container& small) {
-  const Container& jacobSeq = generateJacobsthalSeq<Container>(small.size());
+  const Container& jacobsthalSeq = generateJacobsthalSeq<Container>(small.size());
 
   for (size_t n = 0; small.size(); n++) {
     // 挿入する`small`の要素の順序をJacobsthal数で決める
-    typename Container::iterator insertElem = small.begin() + min<size_t>(jacobSeq[n], small.size() - 1);
+    typename Container::iterator insertElem = small.begin() + min<size_t>(jacobsthalSeq[n], small.size() - 1);
     // 挿入する`small`の要素の位置をstd::lower_boundによって二分探索する
     typename Container::iterator insertPos = std::lower_bound(large.begin(), large.end(), *insertElem);
     // typename Container::iterator insertPos = binarySearch(large, *insertElem);

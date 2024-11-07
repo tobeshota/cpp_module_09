@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <sstream>  //  std::stringstream
 #include <ctime>   //  std::clock, std::CLOCKS_PER_SEC

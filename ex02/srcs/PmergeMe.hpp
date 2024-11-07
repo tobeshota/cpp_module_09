@@ -164,21 +164,18 @@ double measureExecutionTime(Func func, Arg &arg) {
 }
 
 // 入力数列に対して，隣同士でペアを作る
-template<typename Container, typename ContainerWithPairAsElemType>
-void makePair(const Container& input, ContainerWithPairAsElemType& pairs) {
-  for (size_t i = 0; i + 1 < input.size(); i+=2) {
-    if (input[i] < input[i+1])
-      pairs.push_back(std::make_pair(input[i], input[i+1]));
-    else
-      pairs.push_back(std::make_pair(input[i+1], input[i]));
-  }
-}
-
 // ペアのうち，大きい方の要素を数列`large`に格納する
 template<typename Container, typename ContainerWithPairAsElemType>
-void storeLarge(const ContainerWithPairAsElemType& ascendingPairs, Container& large) {
-  for (size_t i = 0; i < ascendingPairs.size(); i++)
-    large.push_back(ascendingPairs[i].second);
+void mkpairAndStoreLarge(const Container& input, ContainerWithPairAsElemType& pairs, Container &large) {
+  for (size_t i = 0; i + 1 < input.size(); i+=2) {
+    if (input[i] < input[i+1]) {
+      pairs.push_back(std::make_pair(input[i], input[i+1]));
+      large.push_back(input[i+1]);
+    } else {
+      pairs.push_back(std::make_pair(input[i+1], input[i]));
+      large.push_back(input[i]);
+    }
+  }
 }
 
 // `small`をソート済みの`large`の順序で格納する

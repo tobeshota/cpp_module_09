@@ -32,8 +32,10 @@
     なお，数列`small`は再起的にソートされた数列`large`に挿入することから，保留(`pend`)とも呼ばれる．
   </dd>
   <dt>`smallAndLargePairs`</dt>
+  <dd>
     `smallAndLargePairs`は，`large`の各要素と`small`の各要素の1対1のペアである．
     なお，`smallAndLargePairs`は主鎖(`main chain`)と保留(`pend`)との関係性を示すものであるからタグ(`tags`)とも呼ばれる．
+  </dd>
   <dt>`remain`</dt>
   <dd>`remain`とは，入力数列が奇数の時に格納する入力数列の末尾の要素である．</dd>
 

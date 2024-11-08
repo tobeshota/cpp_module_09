@@ -191,7 +191,7 @@ void BitcoinExchange::exchangeSafely(const char *BtcPriceChartPath) {
     try {
       // dateを取得する（値チェックを含む）
       const std::string &date = extractValidDate(line, INPUT_TXT_DELIMITER);
-      // quantityを取得する（値チェックを含む）
+      // priceを取得する（値チェックを含む）
       float price = extractValidPrice(line, INPUT_TXT_DELIMITER);
       // 直近のBTCの交換レートを取得する
       float exchangeRate = getRecentlyExchangeRateSafely(date);
